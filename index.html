@@ -452,6 +452,119 @@
       /* Estados controlados por JS */
       .centerCard.fade-top::before{ opacity:1; }
       .centerCard.fade-bottom::after{ opacity:1; }
+
+          /* =========================
+         FOTITOS AÑO NUEVO (mismo vibe del chibi)
+         ========================= */
+      
+      .photoWrap{
+        position: fixed;
+        width: min(190px, 42vw);
+        aspect-ratio: 4/3;
+        z-index: 69;
+        pointer-events: auto;
+        touch-action: manipulation;
+        filter: drop-shadow(0 18px 30px rgba(0,0,0,.55));
+        transform-origin: 50% 80%;
+        will-change: transform, opacity;
+        animation: chibiFloat 4.2s ease-in-out infinite;
+      
+        /* ocultas al inicio */
+        opacity: 0;
+        transform: scale(.82) translateY(18px);
+        transition: opacity .55s ease, transform .55s ease;
+      }
+      
+      .photoWrap.show{
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+      
+      /* Posiciones */
+      .photoWrap.photoA{
+        right: 14px;
+        top: 56vh;
+      }
+      .photoWrap.photoB{
+        right: 14px;
+        top: calc(56vh + min(190px, 42vw) * 0.78);
+      }
+      
+      /* Glow/carta estilo chibi */
+      .photoGlow{
+        position:absolute; inset:-18px;
+        border-radius: 28px;
+        background:
+          radial-gradient(closest-side at 30% 30%, rgba(176,140,255,.30), transparent 62%),
+          radial-gradient(closest-side at 70% 40%, rgba(102,242,255,.26), transparent 62%),
+          radial-gradient(closest-side at 50% 75%, rgba(150,170,255,.18), transparent 65%);
+        opacity: .9;
+        filter: blur(6px);
+        mix-blend-mode: screen;
+        pointer-events:none;
+      }
+      
+      .photoCard{
+        position:absolute; inset:0;
+        border-radius: 22px;
+        background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05));
+        border: 1px solid rgba(255,255,255,.16);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        overflow:hidden;
+      }
+      
+      .photoCard::before{
+        content:"";
+        position:absolute; inset:-2px;
+        background: linear-gradient(135deg, rgba(176,140,255,.35), rgba(102,242,255,.28));
+        opacity:.55;
+        filter: blur(18px);
+        pointer-events:none;
+      }
+      
+      .photoImg{
+        position:absolute; inset:10px;
+        width: calc(100% - 20px);
+        height: calc(100% - 20px);
+        object-fit: cover;
+        border-radius: 16px;
+        pointer-events:none;
+      }
+      
+      .photoTag{
+        position:absolute;
+        left: 10px;
+        top: 10px;
+        padding: 7px 10px;
+        border-radius: 999px;
+        font-weight: 950;
+        letter-spacing:.25px;
+        text-transform: uppercase;
+        font-size: 11px;
+        background: rgba(255,255,255,.10);
+        border:1px solid rgba(255,255,255,.14);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        pointer-events:none;
+      }
+      
+      .photoPulse{
+        position:absolute;
+        left:50%; top:50%;
+        width: 10px; height: 10px;
+        transform: translate(-50%,-50%);
+        border-radius: 999px;
+        background: rgba(255,255,255,.18);
+        box-shadow:
+          0 0 0 0 rgba(176,140,255,.55),
+          0 0 0 0 rgba(102,242,255,.45);
+        opacity: 0;
+        pointer-events:none;
+      }
+      
+      .photoWrap.boop{ animation:none; }
+      .photoWrap.boop .photoPulse{ opacity: 1; animation: pulseRing 650ms ease-out 1; }
   </style>
 </head>
 
@@ -466,11 +579,31 @@
   <div class="chibiWrap" id="chibiWrap" aria-label="Dibujito">
     <div class="chibiGlow"></div>
     <div class="chibiCard">
-      <div class="chibiTag" id="chibiTag">💜💙 TOCA / ARRASTRA</div>
+      <div class="chibiTag" id="chibiTag">💜💙</div>
       <img class="chibiImg" id="chibiImg" src="asd.png" alt="Dibujito chibi" />
       <div class="chibiPulse"></div>
     </div>
   </div>
+
+    <!-- FOTITOS DE AÑO NUEVO (aparecen al llegar a 0) -->
+  <div class="photoWrap photoA" id="photoA" aria-label="Fotito 1">
+    <div class="photoGlow"></div>
+    <div class="photoCard">
+      <div class="photoTag">💜NOSOTROS DE CHIQUITITOS AMORRR💙</div>
+      <img class="photoImg" src="boyandgirl2.jpg" alt="Fotito 1" />
+      <div class="photoPulse"></div>
+    </div>
+  </div>
+  
+  <div class="photoWrap photoB" id="photoB" aria-label="Fotito 2">
+    <div class="photoGlow"></div>
+    <div class="photoCard">
+      <div class="photoTag">💜😳NOSOTROS EN REALIDAD JAKSDJKAJ😳💙</div>
+      <img class="photoImg" src="boyandgirl1.jpg" alt="Fotito 2" />
+      <div class="photoPulse"></div>
+    </div>
+  </div>
+
 
   <div class="ui">
     <div class="topbar">
@@ -615,6 +748,41 @@
     const chibiWrap = document.getElementById("chibiWrap");
     const chibiImg  = document.getElementById("chibiImg");
     const chibiTag  = document.getElementById("chibiTag");
+
+    const photoA = document.getElementById("photoA");
+    const photoB = document.getElementById("photoB");
+    
+    function boopWrap(wrap, strong=false){
+      if (!wrap) return;
+      wrap.classList.add("boop");
+      clearTimeout(wrap._bt);
+      wrap._bt = setTimeout(()=>wrap.classList.remove("boop"), 420);
+    
+      // FX iguales al chibi
+      const r = wrap.getBoundingClientRect();
+      const cx = r.left + r.width/2;
+      const cy = r.top + r.height/2;
+      addSparkles(cx, cy, strong ? 30 : 16);
+      addHeart(cx, cy, strong ? 5 : 2);
+      addPopText(cx, cy - 10, strong ? "TE AMOOOOOO 😭💜💙" : "MUA 💘");
+    }
+    
+    function showNYPhotosForever(){
+      if (!photoA || !photoB) return;
+    
+      photoA.classList.add("show");
+      setTimeout(()=>photoB.classList.add("show"), 260);
+    
+      // Entrada con boops + fireworks
+      setTimeout(()=>boopWrap(photoA, true), 120);
+      setTimeout(()=>boopWrap(photoB, true), 430);
+    
+      // Se quedan ahí siempre (no hay hide)
+    }
+    
+    // Tap en las fotos = boop + corazoncitos
+    photoA?.addEventListener("click", ()=>boopWrap(photoA, true));
+    photoB?.addEventListener("click", ()=>boopWrap(photoB, true));
 
     // ============================
     // HAPTIC (Android) + CHIBI LOOK
@@ -1618,6 +1786,7 @@
             addPopText(cx + rand(-110,110), cy + rand(-70,70), "🎆 FELIZ AÑO NUEVOOOO 💜💙");
           }
           showToast("🎆 FELIZ SEGUNDO AÑO NUEVO DE MUCHOTES MAS MAS MASSSSSS 💜💙");
+          showNYPhotosForever();
         }
       }
     }
@@ -1688,6 +1857,7 @@
   </script>
 </body>
 </html>
+
 
 
 
