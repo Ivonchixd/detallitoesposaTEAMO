@@ -403,6 +403,55 @@
       .hint{ gap:8px; }
       .chip{ padding:7px 9px; font-size:11px; }
     } 
+
+
+
+          /* =========================
+         FADE DE SCROLL (CENTER CARD)
+         ========================= */
+      
+      /* Contenedor con fade */
+      .centerCard{
+        position: relative; /* necesario para el fade */
+      }
+      
+      /* Fade superior */
+      .centerCard::before{
+        content:"";
+        position:absolute;
+        left:0; right:0; top:0;
+        height:26px;
+        pointer-events:none;
+        background: linear-gradient(
+          to bottom,
+          rgba(7,8,20,0.95),
+          rgba(7,8,20,0)
+        );
+        opacity:0;
+        transition: opacity .25s ease;
+        z-index: 2;
+      }
+      
+      /* Fade inferior */
+      .centerCard::after{
+        content:"";
+        position:absolute;
+        left:0; right:0; bottom:0;
+        height:30px;
+        pointer-events:none;
+        background: linear-gradient(
+          to top,
+          rgba(7,8,20,0.95),
+          rgba(7,8,20,0)
+        );
+        opacity:0;
+        transition: opacity .25s ease;
+        z-index: 2;
+      }
+      
+      /* Estados controlados por JS */
+      .centerCard.fade-top::before{ opacity:1; }
+      .centerCard.fade-bottom::after{ opacity:1; }
   </style>
 </head>
 
@@ -1601,8 +1650,44 @@
     requestAnimationFrame(chibiTick);
 
     requestAnimationFrame(loop);
+        // =========================
+    // FADE AUTO EN SCROLL (CENTER CARD)
+    // =========================
+    const centerCard = document.getElementById("card");
+    
+    function updateCenterCardFade(){
+      if (!centerCard) return;
+    
+      const { scrollTop, scrollHeight, clientHeight } = centerCard;
+    
+      // ¿Hay scroll?
+      const hasScroll = scrollHeight > clientHeight + 2;
+    
+      // Arriba
+      if (hasScroll && scrollTop > 4){
+        centerCard.classList.add("fade-top");
+      } else {
+        centerCard.classList.remove("fade-top");
+      }
+    
+      // Abajo
+      if (hasScroll && scrollTop + clientHeight < scrollHeight - 4){
+        centerCard.classList.add("fade-bottom");
+      } else {
+        centerCard.classList.remove("fade-bottom");
+      }
+    }
+    
+    // Eventos
+    centerCard.addEventListener("scroll", updateCenterCardFade, {passive:true});
+    window.addEventListener("resize", updateCenterCardFade, {passive:true});
+    window.addEventListener("orientationchange", updateCenterCardFade, {passive:true});
+    
+    // Inicial
+    setTimeout(updateCenterCardFade, 80);
   </script>
 </body>
 </html>
+
 
 
