@@ -1916,6 +1916,10 @@
         const dy = b.cy - a.cy;
         const dist = Math.hypot(dx,dy);
         const minD = a.rad + b.rad;
+        // 🛑 evita choques infinitos si están casi quietos
+        const speedA = Math.hypot(A.obj?.vx || chibi.vx, A.obj?.vy || chibi.vy);
+        const speedB = Math.hypot(B.obj?.vx || chibi.vx, B.obj?.vy || chibi.vy);
+        if (speedA < 60 && speedB < 60) continue;
         if (dist <= 0 || dist > minD) continue;
 
         const nx = dx / dist;
@@ -2089,6 +2093,7 @@
 </script>
 </body>
 </html>
+
 
 
 
