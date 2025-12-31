@@ -639,8 +639,6 @@
     </div>
   </div>
 
-
-
   <div class="ui">
     <div class="topbar">
       <div class="pill">
@@ -706,1506 +704,1400 @@
     </div>
   </div>
 
-  <script>
-        // ===== Fix VH Android (address bar) =====
-    function setVH(){
-      const vh = window.innerHeight * 0.01;
-      document.documentElement.style.setProperty('--vh', `${vh}px`);
+<script>
+  // ===== Fix VH Android (address bar) =====
+  function setVH(){
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  }
+  setVH();
+  window.addEventListener('resize', setVH, {passive:true});
+  window.addEventListener('orientationchange', setVH, {passive:true});
+
+  /**********************
+   *  Romantic Galaxy ✨ (INTENSO EDITION)
+   **********************/
+
+  // ===== Apodos estáticos (ciclan) =====
+  const NICKNAMES = [
+    "MI TESORITO",
+    "MI REINA HERMOSÍSIMA",
+    "MI ESPOSA",
+    "MI DIOSA",
+    "MI VIDA",
+    "MI PRINCESA",
+    "MI TODO",
+    "MI AMOOOOR",
+    "MI PATRONAAA",
+    "MI OBSESION Y DEBILIDADD"
+  ];
+
+  // ===== Palabras que salen en las estrellas (INTENSIDAD) =====
+  const LOVE_WORDS = [
+    "TE AMOOOOOO","TE AMO AMO AMOOOOOO","AMO AMO AMOOOOOO 😭","ME TIENES LOCOOOOO ❤️","ME ENCANTAAAAAS 😮‍💨",
+    "ERES MI TODOOOO","MI VIDA ENTERA","MI UNIVERSO","MI TESORITOOOO 🫶","MI REINA 😭💘","MI DIOSA ✨",
+    "MI ESPOSA 😮‍💨❤️","MI PRINCESA HERMOSÍSIMA 💘","MI AMOOOORRRR","YO SOY TUYO 😭","TÚ ERES MÍA 💘",
+    "CONTIGO TODOOO","TÚ Y YO SIEMPRE","SIEMPRE CONTIGOOOO","TE QUIERO PEGADITAAA 😭","ME HACES FALTA HASTA CUANDO TE VEO",
+    "CADA DÍA TE AMO MÁSSS","NO ME SUELTES NUNCASSS","ME DERRITOOOO POR TI",
+    "EL AMORRRR DE MI VIDAAAAAAA","MI BLANQUITA PERFECTISISIMAAAAAAA","LA MADRE DE MIS HIJOSSSSSSSS","MI MUJER HERMOSÍSIMA 😭❤️",
+    "MI FUTUROOOO 💍","MI TODO TODO TODOOOO","MI MAMASOSOSOOSTAAAAA ❤️‍🔥","MI CIELOOOO ✨","MI NIÑAAAAA 😭",
+    "FELIZ NAVIDAD MI AMOOOOOR 🎄✨","MI REGALO ERES TÚ 🎁❤️","VEN ACÁ QUE TE ABRAZOOOOO 😭🫶","MI CASITAAAA (TÚ) 🏡💘",
+    "ERES MI PAZ… Y MI LOQUERAAAA 😭","YO TE CUIDO SIEMPRE","TÚ ERES MI HOGARRR","TE VOY A AMAR SIEMPRE SIEMPRE",
+    "ERES PERFECTISISISISISISMA SOLO PARA MIIIIII","TE AMOOOOOO MÁS QUE AYERRR","YO TE AMO A LO LOCO OBSESIVO INTENSOOOOO",
+    "MI VIDA, MI VIDA, MI VIDAAAAA","NO EXISTE NADIE COMO TÚ 😭✨","ERES MI PERSONA FAVORITAAAAA","YO CONTIGO HASTA EL FINNNN",
+    "TÚ ERES MI DESTINOOOO 💘","TE AMOOOOOO CON TODOOOO"
+  ];
+
+  // ===== Sorpresa =====
+  const SURPRISE_LINES = [
+    "MI VIDA ENTERITAAA… VEN A MIII 😭✨",
+    "YO SOLO QUIERO QUE SEPAS ALGO…",
+    "QUE TÚ ME TIENES LOQUISISISSISISIMOOOOOOO ❤️",
+    "Y QUE DE VERDAD…",
+    "TE AMOOOOOO. AMO AMO AMOOOOOO.",
+    "FELIZ NAVIDAD, MI REINA Y PRECIOSURA DIVINAAAAA VAMOS A POR MAS MAS MAS MASSSS JUNTITOSSSSS🎄✨💘"
+  ];
+
+  // ===== UI refs =====
+  const starsCanvas = document.getElementById("stars");
+  const fxCanvas = document.getElementById("fx");
+  const sctx = starsCanvas.getContext("2d");
+  const fctx = fxCanvas.getContext("2d");
+
+  const overlay = document.getElementById("overlay");
+  const startBtn = document.getElementById("start");
+  const nextNickBtn = document.getElementById("nextNick");
+  const who = document.getElementById("who");
+  const headline = document.getElementById("headline");
+  const message = document.getElementById("message");
+  const toast = document.getElementById("toast");
+  const surpriseBtn = document.getElementById("surprise");
+  const toggleModeBtn = document.getElementById("toggleMode");
+
+  // Countdown refs
+  const countdownTime = document.getElementById("countdownTime");
+  const countdownSub  = document.getElementById("countdownSub");
+
+  // CHIBI refs
+  const chibiWrap = document.getElementById("chibiWrap");
+  const chibiImg  = document.getElementById("chibiImg");
+  const chibiTag  = document.getElementById("chibiTag");
+
+  // refs fotos
+  const sprPhotoA = document.getElementById("sprPhotoA");
+  const sprPhotoB = document.getElementById("sprPhotoB");
+
+  // ============================
+  // HAPTIC (Android) + CHIBI LOOK
+  // ============================
+  let holdVibeTimer = null;
+
+  function haptic(pattern = 10){
+    if (!("vibrate" in navigator)) return;
+    if (document.visibilityState !== "visible") return;
+    try { navigator.vibrate(pattern); } catch {}
+  }
+
+  function startHoldVibe(){
+    if (!("vibrate" in navigator)) return;
+    stopHoldVibe();
+    const pattern = [80, 40, 80, 40];
+    haptic(pattern);
+    holdVibeTimer = setInterval(() => haptic(pattern), 160);
+  }
+
+  function stopHoldVibe(){
+    if (holdVibeTimer){
+      clearInterval(holdVibeTimer);
+      holdVibeTimer = null;
     }
-    setVH();
-    window.addEventListener('resize', setVH, {passive:true});
-    window.addEventListener('orientationchange', setVH, {passive:true});
+    haptic(0);
+  }
 
-    /**********************
-     *  Romantic Galaxy ✨ (INTENSO EDITION)
-     **********************/
+  // --- Chibi mira hacia donde va ---
+  let chibiFace = 1;
+  function setChibiFaceFromVX(vx){
+    if (Math.abs(vx) < 40) return;
+    chibiFace = vx >= 0 ? 1 : -1;
+    chibiImg.style.transform =
+      (chibiFace === 1)
+        ? "translateZ(0) scaleX(1)"
+        : "translateZ(0) scaleX(-1)";
+  }
 
-    // ===== Apodos estáticos (ciclan) =====
-    const NICKNAMES = [
-      "MI TESORITO",
-      "MI REINA HERMOSÍSIMA",
-      "MI ESPOSA",
-      "MI DIOSA",
-      "MI VIDA",
-      "MI PRINCESA",
-      "MI TODO",
-      "MI AMOOOOR",
-      "MI PATRONAAA",
-      "MI OBSESION Y DEBILIDADD"
+  // ===== Canvas sizing =====
+  let W = 0, H = 0, DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+
+  function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
+  function lerp(a,b,t){ return a + (b-a)*t; }
+  function rand(a,b){ return a + Math.random()*(b-a); }
+
+  function resize(){
+    W = Math.floor(window.innerWidth);
+    H = Math.floor(window.innerHeight);
+
+    for (const c of [starsCanvas, fxCanvas]){
+      c.width = Math.floor(W * DPR);
+      c.height = Math.floor(H * DPR);
+      c.style.width = W + "px";
+      c.style.height = H + "px";
+    }
+    sctx.setTransform(DPR,0,0,DPR,0,0);
+    fctx.setTransform(DPR,0,0,DPR,0,0);
+
+    buildNebula();
+    clampChibiInside();
+    photoMotorA?.clampInside();
+    photoMotorB?.clampInside();
+    updateCenterCardFade();
+  }
+  window.addEventListener("resize", resize, {passive:true});
+
+  // ===== Modos SOLO LILA + AZUL =====
+  const MODES = [
+    { name:"LILA AURORA", bg1:"#070814", bg2:"#130a2f", neb1:"rgba(176,140,255,0.95)", neb2:"rgba(102,242,255,0.95)", neb3:"rgba(150,170,255,0.95)" },
+    { name:"BLUEBERRY LILA", bg1:"#06091a", bg2:"#0b2440", neb1:"rgba(164,120,255,0.95)", neb2:"rgba(90,170,255,0.95)", neb3:"rgba(120,220,255,0.95)" },
+    { name:"ICE LILAC", bg1:"#060816", bg2:"#121a44", neb1:"rgba(190,160,255,0.95)", neb2:"rgba(120,240,255,0.95)", neb3:"rgba(110,140,255,0.95)" },
+    { name:"DEEP NEON", bg1:"#050615", bg2:"#0b0f2a", neb1:"rgba(130,90,255,0.95)", neb2:"rgba(80,245,255,0.95)", neb3:"rgba(175,155,255,0.95)" }
+  ];
+  let mode = 0;
+
+  function showToast(text="✨ TE AMOOOOOO ✨"){
+    toast.textContent = text;
+    toast.classList.add("show");
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(()=>toast.classList.remove("show"), 1000);
+  }
+
+  function applyMode(i){
+    const m = MODES[i % MODES.length];
+    const r = document.documentElement.style;
+
+    r.setProperty("--bg1", m.bg1);
+    r.setProperty("--bg2", m.bg2);
+    r.setProperty("--neb1", m.neb1);
+    r.setProperty("--neb2", m.neb2);
+    r.setProperty("--neb3", m.neb3);
+
+    document.body.style.background =
+      `radial-gradient(1200px 800px at 20% 10%, ${m.neb1.replace("0.95","0.18")} 0%, transparent 55%),
+       radial-gradient(900px 700px at 70% 20%, ${m.neb2.replace("0.95","0.16")} 0%, transparent 55%),
+       radial-gradient(800px 700px at 50% 80%, ${m.neb3.replace("0.95","0.16")} 0%, transparent 60%),
+       linear-gradient(160deg, ${m.bg1}, ${m.bg2})`;
+
+    buildNebula();
+    showToast("💜💙 " + m.name + " 💜💙");
+  }
+
+  // ===== Nebula pre-render =====
+  let nebula = null;
+
+  function cssVar(name){
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  }
+
+  function buildNebula(){
+    nebula = document.createElement("canvas");
+    nebula.width = Math.floor(W * DPR);
+    nebula.height = Math.floor(H * DPR);
+    const nctx = nebula.getContext("2d");
+    nctx.setTransform(DPR,0,0,DPR,0,0);
+
+    const c1 = cssVar("--neb1") || "rgba(176,140,255,0.95)";
+    const c2 = cssVar("--neb2") || "rgba(102,242,255,0.95)";
+    const c3 = cssVar("--neb3") || "rgba(150,170,255,0.95)";
+
+    const blobs = [
+      {x: W*0.22, y: H*0.20, r: Math.min(W,H)*0.55, a: 0.18, c: c1},
+      {x: W*0.74, y: H*0.22, r: Math.min(W,H)*0.50, a: 0.16, c: c2},
+      {x: W*0.50, y: H*0.78, r: Math.min(W,H)*0.60, a: 0.16, c: c3},
     ];
 
-    // ===== Palabras que salen en las estrellas (INTENSIDAD) =====
-    const LOVE_WORDS = [
-      "TE AMOOOOOO","TE AMO AMO AMOOOOOO","AMO AMO AMOOOOOO 😭","ME TIENES LOCOOOOO ❤️","ME ENCANTAAAAAS 😮‍💨",
-      "ERES MI TODOOOO","MI VIDA ENTERA","MI UNIVERSO","MI TESORITOOOO 🫶","MI REINA 😭💘","MI DIOSA ✨",
-      "MI ESPOSA 😮‍💨❤️","MI PRINCESA HERMOSÍSIMA 💘","MI AMOOOORRRR","YO SOY TUYO 😭","TÚ ERES MÍA 💘",
-      "CONTIGO TODOOO","TÚ Y YO SIEMPRE","SIEMPRE CONTIGOOOO","TE QUIERO PEGADITAAA 😭","ME HACES FALTA HASTA CUANDO TE VEO",
-      "CADA DÍA TE AMO MÁSSS","NO ME SUELTES NUNCASSS","ME DERRITOOOO POR TI",
-      "EL AMORRRR DE MI VIDAAAAAAA","MI BLANQUITA PERFECTISISIMAAAAAAA","LA MADRE DE MIS HIJOSSSSSSSS","MI MUJER HERMOSÍSIMA 😭❤️",
-      "MI FUTUROOOO 💍","MI TODO TODO TODOOOO","MI MAMASOSOSOOSTAAAAA ❤️‍🔥","MI CIELOOOO ✨","MI NIÑAAAAA 😭",
-      "FELIZ NAVIDAD MI AMOOOOOR 🎄✨","MI REGALO ERES TÚ 🎁❤️","VEN ACÁ QUE TE ABRAZOOOOO 😭🫶","MI CASITAAAA (TÚ) 🏡💘",
-      "ERES MI PAZ… Y MI LOQUERAAAA 😭","YO TE CUIDO SIEMPRE","TÚ ERES MI HOGARRR","TE VOY A AMAR SIEMPRE SIEMPRE",
-      "ERES PERFECTISISISISISISMA SOLO PARA MIIIIII","TE AMOOOOOO MÁS QUE AYERRR","YO TE AMO A LO LOCO OBSESIVO INTENSOOOOO",
-      "MI VIDA, MI VIDA, MI VIDAAAAA","NO EXISTE NADIE COMO TÚ 😭✨","ERES MI PERSONA FAVORITAAAAA","YO CONTIGO HASTA EL FINNNN",
-      "TÚ ERES MI DESTINOOOO 💘","TE AMOOOOOO CON TODOOOO"
-    ];
-
-    // ===== Sorpresa =====
-    const SURPRISE_LINES = [
-      "MI VIDA ENTERITAAA… VEN A MIII 😭✨",
-      "YO SOLO QUIERO QUE SEPAS ALGO…",
-      "QUE TÚ ME TIENES LOQUISISISSISISIMOOOOOOO ❤️",
-      "Y QUE DE VERDAD…",
-      "TE AMOOOOOO. AMO AMO AMOOOOOO.",
-      "FELIZ NAVIDAD, MI REINA Y PRECIOSURA DIVINAAAAA VAMOS A POR MAS MAS MAS MASSSS JUNTITOSSSSS🎄✨💘"
-    ];
-
-    // ===== UI refs =====
-    const starsCanvas = document.getElementById("stars");
-    const fxCanvas = document.getElementById("fx");
-    const sctx = starsCanvas.getContext("2d");
-    const fctx = fxCanvas.getContext("2d");
-
-    const overlay = document.getElementById("overlay");
-    const startBtn = document.getElementById("start");
-    const nextNickBtn = document.getElementById("nextNick");
-    const who = document.getElementById("who");
-    const headline = document.getElementById("headline");
-    const message = document.getElementById("message");
-    const toast = document.getElementById("toast");
-    const surpriseBtn = document.getElementById("surprise");
-    const toggleModeBtn = document.getElementById("toggleMode");
-
-    // Countdown refs
-    const countdownTime = document.getElementById("countdownTime");
-    const countdownSub  = document.getElementById("countdownSub");
-
-    // CHIBI refs
-    const chibiWrap = document.getElementById("chibiWrap");
-    const chibiImg  = document.getElementById("chibiImg");
-    const chibiTag  = document.getElementById("chibiTag");
-
-    // ============================
-    // HAPTIC (Android) + CHIBI LOOK
-    // ============================
-    
-    // --- Vibración ---
-    let holdVibeTimer = null;
-    
-    function haptic(pattern = 10){
-      if (!("vibrate" in navigator)) return;
-      if (document.visibilityState !== "visible") return;
-      try { navigator.vibrate(pattern); } catch {}
-    }
-    
-    function startHoldVibe(){
-      if (!("vibrate" in navigator)) return;
-      stopHoldVibe();
-    
-      // patrón "casi continuo"
-      const pattern = [80, 40, 80, 40];
-      haptic(pattern);
-      holdVibeTimer = setInterval(() => haptic(pattern), 160);
-    }
-    
-    function stopHoldVibe(){
-      if (holdVibeTimer){
-        clearInterval(holdVibeTimer);
-        holdVibeTimer = null;
-      }
-      // corta cualquier vibración activa
-      haptic(0);
-    }
-    
-    // --- Chibi mira hacia donde va ---
-    let chibiFace = 1; // 1 normal, -1 volteado
-    
-    function setChibiFaceFromVX(vx){
-      if (Math.abs(vx) < 40) return; // evita parpadeo
-      chibiFace = vx >= 0 ? 1 : -1;
-    
-      // Flip SOLO la imagen (no el wrapper que rota)
-      chibiImg.style.transform =
-        (chibiFace === 1)
-          ? "translateZ(0) scaleX(1)"
-          : "translateZ(0) scaleX(-1)";
+    nctx.clearRect(0,0,W,H);
+    for (const b of blobs){
+      const g = nctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r);
+      const base = b.c.replace(/rgba\(([^)]+)\)/, (m,inner)=>{
+        const parts = inner.split(",").map(s=>s.trim());
+        return `rgba(${parts[0]}, ${parts[1]}, ${parts[2]}, ${b.a})`;
+      });
+      g.addColorStop(0, base);
+      g.addColorStop(1, "rgba(0,0,0,0)");
+      nctx.fillStyle = g;
+      nctx.beginPath();
+      nctx.arc(b.x, b.y, b.r, 0, Math.PI*2);
+      nctx.fill();
     }
 
-    // ===== Canvas sizing =====
-    let W = 0, H = 0, DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
-
-    function resize(){
-      W = Math.floor(window.innerWidth);
-      H = Math.floor(window.innerHeight);
-
-      for (const c of [starsCanvas, fxCanvas]){
-        c.width = Math.floor(W * DPR);
-        c.height = Math.floor(H * DPR);
-        c.style.width = W + "px";
-        c.style.height = H + "px";
-      }
-      sctx.setTransform(DPR,0,0,DPR,0,0);
-      fctx.setTransform(DPR,0,0,DPR,0,0);
-
-      buildNebula();
-      clampChibiInside();
+    nctx.globalCompositeOperation = "screen";
+    for (let i=0;i<460;i++){
+      const x = Math.random()*W, y = Math.random()*H;
+      const rr = Math.random()*1.8+0.3;
+      nctx.fillStyle = `rgba(255,255,255,${Math.random()*0.06})`;
+      nctx.beginPath();
+      nctx.arc(x,y,rr,0,Math.PI*2);
+      nctx.fill();
     }
-    window.addEventListener("resize", resize, {passive:true});
+    nctx.globalCompositeOperation = "source-over";
+  }
 
-    // ===== Modos SOLO LILA + AZUL =====
-    const MODES = [
-      {
-        name: "LILA AURORA",
-        bg1:"#070814", bg2:"#130a2f",
-        neb1:"rgba(176,140,255,0.95)",
-        neb2:"rgba(102,242,255,0.95)",
-        neb3:"rgba(150,170,255,0.95)"
-      },
-      {
-        name: "BLUEBERRY LILA",
-        bg1:"#06091a", bg2:"#0b2440",
-        neb1:"rgba(164,120,255,0.95)",
-        neb2:"rgba(90,170,255,0.95)",
-        neb3:"rgba(120,220,255,0.95)"
-      },
-      {
-        name: "ICE LILAC",
-        bg1:"#060816", bg2:"#121a44",
-        neb1:"rgba(190,160,255,0.95)",
-        neb2:"rgba(120,240,255,0.95)",
-        neb3:"rgba(110,140,255,0.95)"
-      },
-      {
-        name: "DEEP NEON",
-        bg1:"#050615", bg2:"#0b0f2a",
-        neb1:"rgba(130,90,255,0.95)",
-        neb2:"rgba(80,245,255,0.95)",
-        neb3:"rgba(175,155,255,0.95)"
-      }
-    ];
-    let mode = 0;
+  // ===== Stars + FX =====
+  const stars = [];
+  const popTexts = [];
+  const comets = [];
+  const sparkles = [];
+  const hearts = [];
 
-    function applyMode(i){
-      const m = MODES[i % MODES.length];
-      const r = document.documentElement.style;
-
-      r.setProperty("--bg1", m.bg1);
-      r.setProperty("--bg2", m.bg2);
-      r.setProperty("--neb1", m.neb1);
-      r.setProperty("--neb2", m.neb2);
-      r.setProperty("--neb3", m.neb3);
-
-      document.body.style.background =
-        `radial-gradient(1200px 800px at 20% 10%, ${m.neb1.replace("0.95","0.18")} 0%, transparent 55%),
-         radial-gradient(900px 700px at 70% 20%, ${m.neb2.replace("0.95","0.16")} 0%, transparent 55%),
-         radial-gradient(800px 700px at 50% 80%, ${m.neb3.replace("0.95","0.16")} 0%, transparent 60%),
-         linear-gradient(160deg, ${m.bg1}, ${m.bg2})`;
-
-      buildNebula();
-      showToast("💜💙 " + m.name + " 💜💙");
-    }
-
-    // ===== Nebula pre-render =====
-    let nebula = null;
-
-    function cssVar(name){
-      return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-    }
-
-    function buildNebula(){
-      nebula = document.createElement("canvas");
-      nebula.width = Math.floor(W * DPR);
-      nebula.height = Math.floor(H * DPR);
-      const nctx = nebula.getContext("2d");
-      nctx.setTransform(DPR,0,0,DPR,0,0);
-
-      const c1 = cssVar("--neb1") || "rgba(176,140,255,0.95)";
-      const c2 = cssVar("--neb2") || "rgba(102,242,255,0.95)";
-      const c3 = cssVar("--neb3") || "rgba(150,170,255,0.95)";
-
-      const blobs = [
-        {x: W*0.22, y: H*0.20, r: Math.min(W,H)*0.55, a: 0.18, c: c1},
-        {x: W*0.74, y: H*0.22, r: Math.min(W,H)*0.50, a: 0.16, c: c2},
-        {x: W*0.50, y: H*0.78, r: Math.min(W,H)*0.60, a: 0.16, c: c3},
-      ];
-
-      nctx.clearRect(0,0,W,H);
-      for (const b of blobs){
-        const g = nctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r);
-        const base = b.c.replace(/rgba\(([^)]+)\)/, (m,inner)=>{
-          const parts = inner.split(",").map(s=>s.trim());
-          return `rgba(${parts[0]}, ${parts[1]}, ${parts[2]}, ${b.a})`;
-        });
-        g.addColorStop(0, base);
-        g.addColorStop(1, "rgba(0,0,0,0)");
-        nctx.fillStyle = g;
-        nctx.beginPath();
-        nctx.arc(b.x, b.y, b.r, 0, Math.PI*2);
-        nctx.fill();
-      }
-
-      nctx.globalCompositeOperation = "screen";
-      for (let i=0;i<460;i++){
-        const x = Math.random()*W, y = Math.random()*H;
-        const rr = Math.random()*1.8+0.3;
-        nctx.fillStyle = `rgba(255,255,255,${Math.random()*0.06})`;
-        nctx.beginPath();
-        nctx.arc(x,y,rr,0,Math.PI*2);
-        nctx.fill();
-      }
-      nctx.globalCompositeOperation = "source-over";
-    }
-
-    // ===== Stars + FX =====
-    const stars = [];
-    const popTexts = [];
-    const comets = [];
-    const sparkles = [];
-    const hearts = [];
-
-    function rand(a,b){return a + Math.random()*(b-a);}
-
-    function makeStars(count){
-      stars.length = 0;
-      for (let i=0;i<count;i++){
-        const z = Math.random();
-        stars.push({
-          x: Math.random()*W,
-          y: Math.random()*H,
-          r: rand(0.6, 1.9) * (0.6 + z*1.2),
-          tw: rand(0.004, 0.018),
-          ph: Math.random()*Math.PI*2,
-          z,
-          vx: rand(-0.02, 0.02) * (0.5 + z),
-          vy: rand(-0.02, 0.02) * (0.5 + z),
-        });
-      }
-    }
-
-    function drawStars(t){
-      sctx.clearRect(0,0,W,H);
-      if (nebula) sctx.drawImage(nebula, 0, 0, W, H);
-
-      for (const st of stars){
-        st.x += st.vx; st.y += st.vy;
-        if (st.x < -10) st.x = W+10;
-        if (st.x > W+10) st.x = -10;
-        if (st.y < -10) st.y = H+10;
-        if (st.y > H+10) st.y = -10;
-
-        const a = 0.35 + 0.55 * (0.5 + 0.5*Math.sin(t*st.tw + st.ph));
-        sctx.globalAlpha = a;
-        sctx.beginPath();
-        sctx.fillStyle = "rgba(255,255,255,1)";
-        sctx.arc(st.x, st.y, st.r, 0, Math.PI*2);
-        sctx.fill();
-
-        sctx.globalAlpha = a*0.18;
-        sctx.beginPath();
-        sctx.arc(st.x, st.y, st.r*4.2, 0, Math.PI*2);
-        sctx.fill();
-      }
-      sctx.globalAlpha = 1;
-    }
-
-    function addPopText(x,y,txt){
-      popTexts.push({
-        x, y, txt,
-        life: 0,
-        ttl: 1300 + Math.random()*700,
-        vx: rand(-0.02, 0.02),
-        vy: rand(-0.05, -0.02),
-        rot: rand(-0.08,0.08),
-        scale: rand(0.92,1.15)
+  function makeStars(count){
+    stars.length = 0;
+    for (let i=0;i<count;i++){
+      const z = Math.random();
+      stars.push({
+        x: Math.random()*W,
+        y: Math.random()*H,
+        r: rand(0.6, 1.9) * (0.6 + z*1.2),
+        tw: rand(0.004, 0.018),
+        ph: Math.random()*Math.PI*2,
+        z,
+        vx: rand(-0.02, 0.02) * (0.5 + z),
+        vy: rand(-0.02, 0.02) * (0.5 + z),
       });
     }
+  }
 
-    function addSparkles(x,y,amount=14){
-      for (let i=0;i<amount;i++){
-        sparkles.push({
-          x, y,
-          vx: rand(-0.25, 0.25),
-          vy: rand(-0.35, 0.15),
-          r: rand(0.6, 2.2),
-          life: 0,
-          ttl: rand(450, 900),
-          a: rand(0.35, 0.95)
-        });
+  function drawStars(t){
+    sctx.clearRect(0,0,W,H);
+    if (nebula) sctx.drawImage(nebula, 0, 0, W, H);
+
+    for (const st of stars){
+      st.x += st.vx; st.y += st.vy;
+      if (st.x < -10) st.x = W+10;
+      if (st.x > W+10) st.x = -10;
+      if (st.y < -10) st.y = H+10;
+      if (st.y > H+10) st.y = -10;
+
+      const a = 0.35 + 0.55 * (0.5 + 0.5*Math.sin(t*st.tw + st.ph));
+      sctx.globalAlpha = a;
+      sctx.beginPath();
+      sctx.fillStyle = "rgba(255,255,255,1)";
+      sctx.arc(st.x, st.y, st.r, 0, Math.PI*2);
+      sctx.fill();
+
+      sctx.globalAlpha = a*0.18;
+      sctx.beginPath();
+      sctx.arc(st.x, st.y, st.r*4.2, 0, Math.PI*2);
+      sctx.fill();
+    }
+    sctx.globalAlpha = 1;
+  }
+
+  function addPopText(x,y,txt){
+    popTexts.push({
+      x, y, txt,
+      life: 0,
+      ttl: 1300 + Math.random()*700,
+      vx: rand(-0.02, 0.02),
+      vy: rand(-0.05, -0.02),
+      rot: rand(-0.08,0.08),
+      scale: rand(0.92,1.15)
+    });
+  }
+
+  function addSparkles(x,y,amount=14){
+    for (let i=0;i<amount;i++){
+      sparkles.push({
+        x, y,
+        vx: rand(-0.25, 0.25),
+        vy: rand(-0.35, 0.15),
+        r: rand(0.6, 2.2),
+        life: 0,
+        ttl: rand(450, 900),
+        a: rand(0.35, 0.95)
+      });
+    }
+  }
+
+  function spawnComet(x,y,dx,dy){
+    const sp = Math.min(1.6, Math.max(0.7, Math.hypot(dx,dy)/220));
+    comets.push({ x,y, vx: dx*0.010*sp, vy: dy*0.010*sp, life: 0, ttl: 900 + Math.random()*500 });
+  }
+
+  function addHeart(x,y,amount=1){
+    for(let i=0;i<amount;i++){
+      hearts.push({
+        x: x + rand(-10,10),
+        y: y + rand(-10,10),
+        vx: rand(-0.03, 0.03),
+        vy: rand(-0.09, -0.03),
+        life: 0,
+        ttl: rand(900, 1400),
+        s: rand(10, 18),
+        rot: rand(-0.8,0.8)
+      });
+    }
+  }
+
+  function drawHeart(ctx, size){
+    const s = size;
+    ctx.beginPath();
+    ctx.moveTo(0, s*0.25);
+    ctx.bezierCurveTo(0, -s*0.15, -s*0.45, -s*0.15, -s*0.45, s*0.2);
+    ctx.bezierCurveTo(-s*0.45, s*0.55, 0, s*0.75, 0, s*1.0);
+    ctx.bezierCurveTo(0, s*0.75, s*0.45, s*0.55, s*0.45, s*0.2);
+    ctx.bezierCurveTo(s*0.45, -s*0.15, 0, -s*0.15, 0, s*0.25);
+    ctx.closePath();
+  }
+
+  function drawFX(dt){
+    fctx.clearRect(0,0,W,H);
+
+    // Cometas
+    fctx.globalCompositeOperation = "lighter";
+    for (let i=comets.length-1;i>=0;i--){
+      const c = comets[i];
+      c.life += dt;
+      c.x += c.vx * dt;
+      c.y += c.vy * dt;
+
+      const p = Math.min(1, c.life / c.ttl);
+      const a = 0.7*(1-p);
+      const len = 90 + 140*(1-p);
+
+      const ang = Math.atan2(c.vy, c.vx);
+      const tx = c.x - Math.cos(ang)*len;
+      const ty = c.y - Math.sin(ang)*len;
+
+      const g = fctx.createLinearGradient(c.x,c.y,tx,ty);
+      g.addColorStop(0, `rgba(255,255,255,${a})`);
+      g.addColorStop(0.35, `rgba(176,140,255,${a*0.9})`);
+      g.addColorStop(0.7, `rgba(102,242,255,${a*0.7})`);
+      g.addColorStop(1, "rgba(0,0,0,0)");
+      fctx.strokeStyle = g;
+      fctx.lineWidth = 2.2;
+      fctx.beginPath(); fctx.moveTo(c.x,c.y); fctx.lineTo(tx,ty); fctx.stroke();
+
+      fctx.fillStyle = `rgba(255,255,255,${a})`;
+      fctx.beginPath(); fctx.arc(c.x,c.y, 2.2, 0, Math.PI*2); fctx.fill();
+
+      if (c.life > c.ttl) comets.splice(i,1);
+    }
+
+    // Sparkles
+    for (let i=sparkles.length-1;i>=0;i--){
+      const s = sparkles[i];
+      s.life += dt;
+      s.x += s.vx * dt;
+      s.y += s.vy * dt;
+      const p = Math.min(1, s.life/s.ttl);
+      const a = s.a*(1-p);
+
+      fctx.fillStyle = `rgba(255,255,255,${a})`;
+      fctx.beginPath();
+      fctx.arc(s.x,s.y, s.r*(1-p*0.4), 0, Math.PI*2);
+      fctx.fill();
+
+      if (s.life > s.ttl) sparkles.splice(i,1);
+    }
+
+    // Hearts
+    for (let i=hearts.length-1;i>=0;i--){
+      const h = hearts[i];
+      h.life += dt;
+      h.x += h.vx * dt * 60;
+      h.y += h.vy * dt * 60;
+
+      const p = Math.min(1, h.life / h.ttl);
+      const a = (1-p);
+      const bob = Math.sin((h.life/1000)*6) * 2;
+
+      fctx.save();
+      fctx.translate(h.x, h.y + bob);
+      fctx.rotate(h.rot * (0.2 + p*0.25));
+
+      const grad = fctx.createLinearGradient(-h.s, -h.s, h.s, h.s);
+      grad.addColorStop(0, `rgba(176,140,255,${a*0.85})`);
+      grad.addColorStop(1, `rgba(102,242,255,${a*0.80})`);
+
+      fctx.shadowColor = "rgba(176,140,255,0.65)";
+      fctx.shadowBlur = 18;
+
+      fctx.fillStyle = grad;
+      drawHeart(fctx, h.s);
+      fctx.fill();
+
+      fctx.shadowColor = "rgba(102,242,255,0.55)";
+      fctx.shadowBlur = 22;
+      fctx.lineWidth = 1;
+      fctx.strokeStyle = `rgba(255,255,255,${a*0.45})`;
+      fctx.stroke();
+
+      fctx.restore();
+
+      if (h.life > h.ttl) hearts.splice(i,1);
+    }
+
+    // Textos
+    fctx.globalCompositeOperation = "source-over";
+    for (let i=popTexts.length-1;i>=0;i--){
+      const pT = popTexts[i];
+      pT.life += dt;
+      pT.x += pT.vx * dt * 60;
+      pT.y += pT.vy * dt * 60;
+
+      const p = Math.min(1, pT.life/pT.ttl);
+      const a = (1-p);
+      const yLift = (1-p)*10;
+
+      fctx.save();
+      fctx.translate(pT.x, pT.y - yLift);
+      fctx.rotate(pT.rot*p);
+      const size = (16 + 10*(1-p)) * pT.scale;
+
+      fctx.font = `950 ${size}px ui-rounded, system-ui`;
+      fctx.textAlign = "center";
+      fctx.textBaseline = "middle";
+
+      fctx.shadowColor = "rgba(176,140,255,0.85)";
+      fctx.shadowBlur = 20;
+      fctx.fillStyle = `rgba(255,255,255,${a})`;
+      fctx.fillText(pT.txt, 0, 0);
+
+      fctx.shadowColor = "rgba(102,242,255,0.65)";
+      fctx.shadowBlur = 22;
+      fctx.fillStyle = `rgba(176,140,255,${a*0.34})`;
+      fctx.fillText(pT.txt, 0, 1);
+
+      fctx.restore();
+
+      if (pT.life > pT.ttl) popTexts.splice(i,1);
+    }
+  }
+
+  // ===== Interacción estrellas =====
+  let isDown = false;
+  let holdTimer = null;
+  let loveRainTimer = null;
+  let lastX = 0, lastY = 0;
+
+  function nearestStar(x,y){
+    let best = null, bestD = 1e9;
+    for (const st of stars){
+      const dx = st.x - x, dy = st.y - y;
+      const d = dx*dx + dy*dy;
+      if (d < bestD){ bestD = d; best = st; }
+    }
+    return {st: best, d2: bestD};
+  }
+
+  let loveIndex = 0;
+  function loveRainStart(x, y){
+    clearInterval(loveRainTimer);
+    loveRainTimer = setInterval(()=>{
+      for (let k = 0; k < 2; k++){
+        const word = LOVE_WORDS[loveIndex % LOVE_WORDS.length];
+        loveIndex++;
+        addPopText(x + rand(-26, 26), y + rand(-26, 26), word);
       }
+      addSparkles(x, y, 16);
+      addHeart(x, y, 1);
+    }, 110);
+  }
+  function loveRainStop(){ clearInterval(loveRainTimer); }
+
+  function pointerPos(e){
+    const t = e.touches ? e.touches[0] : e;
+    return {x: t.clientX, y: t.clientY};
+  }
+
+  function onDown(e){
+    if (e.__chibiBlocked) return;
+    e.preventDefault();
+    const {x,y} = pointerPos(e);
+    isDown = true;
+    lastX = x; lastY = y;
+
+    clearTimeout(holdTimer);
+    holdTimer = setTimeout(()=>{
+      showToast("🫶 TE AMOOOOOO INFINITOOOOOO 😭💘");
+      loveRainStart(lastX,lastY);
+      startHoldVibe();
+    }, 350);
+
+    const ns = nearestStar(x,y);
+    if (ns.st && ns.d2 < 2200){
+      const word = LOVE_WORDS[(Math.random()*LOVE_WORDS.length)|0];
+      addPopText(ns.st.x, ns.st.y, word);
+      addSparkles(ns.st.x, ns.st.y, 18);
+      addHeart(ns.st.x, ns.st.y, 2);
+      showToast("✨ " + (word.length > 18 ? "TE AMOOOOOO" : word) + " ✨");
+    } else {
+      addSparkles(x,y, 12);
+      addHeart(x,y, 2);
+      addPopText(x,y, "TE AMOOOOOO");
+      showToast();
     }
+  }
 
-    function spawnComet(x,y,dx,dy){
-      const sp = Math.min(1.6, Math.max(0.7, Math.hypot(dx,dy)/220));
-      comets.push({ x,y, vx: dx*0.010*sp, vy: dy*0.010*sp, life: 0, ttl: 900 + Math.random()*500 });
+  function onMove(e){
+    if (!isDown) return;
+    const {x,y} = pointerPos(e);
+    const dx = x - lastX, dy = y - lastY;
+    if (Math.hypot(dx,dy) > 14){
+      spawnComet(x,y, dx, dy);
+      if (Math.random() < 0.28) addSparkles(x,y, 7);
+      if (Math.random() < 0.22) addHeart(x,y, 1);
     }
+    lastX = x; lastY = y;
+  }
 
-    function addHeart(x,y,amount=1){
-      for(let i=0;i<amount;i++){
-        hearts.push({
-          x: x + rand(-10,10),
-          y: y + rand(-10,10),
-          vx: rand(-0.03, 0.03),
-          vy: rand(-0.09, -0.03),
-          life: 0,
-          ttl: rand(900, 1400),
-          s: rand(10, 18),
-          rot: rand(-0.8,0.8)
-        });
-      }
-    }
+  function onUp(){
+    isDown = false;
+    clearTimeout(holdTimer);
+    loveRainStop();
+    stopHoldVibe();
+  }
 
-    function drawHeart(ctx, size){
-      const s = size;
-      ctx.beginPath();
-      ctx.moveTo(0, s*0.25);
-      ctx.bezierCurveTo(0, -s*0.15, -s*0.45, -s*0.15, -s*0.45, s*0.2);
-      ctx.bezierCurveTo(-s*0.45, s*0.55, 0, s*0.75, 0, s*1.0);
-      ctx.bezierCurveTo(0, s*0.75, s*0.45, s*0.55, s*0.45, s*0.2);
-      ctx.bezierCurveTo(s*0.45, -s*0.15, 0, -s*0.15, 0, s*0.25);
-      ctx.closePath();
-    }
+  // =====================================
+  // TAP/DRAG GLOBAL (NO SE COME LOS CLICKS)
+  // =====================================
+  let activePointerId = null;
 
-    function drawFX(dt){
-      fctx.clearRect(0,0,W,H);
+  function isInteractiveTarget(el){
+    if (!el) return false;
+    return !!el.closest(
+      "button, a, input, textarea, select, label, summary, details, [role='button'], .chibiWrap, .spriteWrap"
+    );
+  }
 
-      // Cometas
-      fctx.globalCompositeOperation = "lighter";
-      for (let i=comets.length-1;i>=0;i--){
-        const c = comets[i];
-        c.life += dt;
-        c.x += c.vx * dt;
-        c.y += c.vy * dt;
+  function onGlobalDown(e){
+    if (isInteractiveTarget(e.target)) return;
+    e.preventDefault();
+    activePointerId = e.pointerId ?? 1;
+    onDown(e);
+  }
 
-        const p = Math.min(1, c.life / c.ttl);
-        const a = 0.7*(1-p);
-        const len = 90 + 140*(1-p);
+  function onGlobalMove(e){
+    if (activePointerId == null) return;
+    if ((e.pointerId ?? 1) !== activePointerId) return;
+    if (chibi && chibi.dragging) return;
+    e.preventDefault();
+    onMove(e);
+  }
 
-        const ang = Math.atan2(c.vy, c.vx);
-        const tx = c.x - Math.cos(ang)*len;
-        const ty = c.y - Math.sin(ang)*len;
+  function onGlobalUp(e){
+    if (activePointerId == null) return;
+    if ((e.pointerId ?? 1) !== activePointerId) return;
+    activePointerId = null;
+    onUp(e);
+  }
 
-        const g = fctx.createLinearGradient(c.x,c.y,tx,ty);
-        g.addColorStop(0, `rgba(255,255,255,${a})`);
-        g.addColorStop(0.35, `rgba(176,140,255,${a*0.9})`);
-        g.addColorStop(0.7, `rgba(102,242,255,${a*0.7})`);
-        g.addColorStop(1, "rgba(0,0,0,0)");
-        fctx.strokeStyle = g;
-        fctx.lineWidth = 2.2;
-        fctx.beginPath(); fctx.moveTo(c.x,c.y); fctx.lineTo(tx,ty); fctx.stroke();
+  // ✅ IMPORTANTÍSIMO: SIN capture:true
+  window.addEventListener("pointerdown", onGlobalDown, { passive:false });
+  window.addEventListener("pointermove", onGlobalMove, { passive:false });
+  window.addEventListener("pointerup", onGlobalUp, { passive:true });
+  window.addEventListener("pointercancel", onGlobalUp, { passive:true });
 
-        fctx.fillStyle = `rgba(255,255,255,${a})`;
-        fctx.beginPath(); fctx.arc(c.x,c.y, 2.2, 0, Math.PI*2); fctx.fill();
+  // ===== Surprise =====
+  function runSurprise(){
+    const originalM = message.textContent;
+    const originalH = headline.textContent;
 
-        if (c.life > c.ttl) comets.splice(i,1);
-      }
+    headline.textContent = "AMORCITOOOO… MÍRAME AQUÍ<333";
+    message.textContent = "";
+    let i = 0;
 
-      // Sparkles
-      for (let i=sparkles.length-1;i>=0;i--){
-        const s = sparkles[i];
-        s.life += dt;
-        s.x += s.vx * dt;
-        s.y += s.vy * dt;
-        const p = Math.min(1, s.life/s.ttl);
-        const a = s.a*(1-p);
-
-        fctx.fillStyle = `rgba(255,255,255,${a})`;
-        fctx.beginPath();
-        fctx.arc(s.x,s.y, s.r*(1-p*0.4), 0, Math.PI*2);
-        fctx.fill();
-
-        if (s.life > s.ttl) sparkles.splice(i,1);
-      }
-
-      // Hearts
-      for (let i=hearts.length-1;i>=0;i--){
-        const h = hearts[i];
-        h.life += dt;
-        h.x += h.vx * dt * 60;
-        h.y += h.vy * dt * 60;
-
-        const p = Math.min(1, h.life / h.ttl);
-        const a = (1-p);
-        const bob = Math.sin((h.life/1000)*6) * 2;
-
-        fctx.save();
-        fctx.translate(h.x, h.y + bob);
-        fctx.rotate(h.rot * (0.2 + p*0.25));
-
-        const grad = fctx.createLinearGradient(-h.s, -h.s, h.s, h.s);
-        grad.addColorStop(0, `rgba(176,140,255,${a*0.85})`);
-        grad.addColorStop(1, `rgba(102,242,255,${a*0.80})`);
-
-        fctx.shadowColor = "rgba(176,140,255,0.65)";
-        fctx.shadowBlur = 18;
-
-        fctx.fillStyle = grad;
-        drawHeart(fctx, h.s);
-        fctx.fill();
-
-        fctx.shadowColor = "rgba(102,242,255,0.55)";
-        fctx.shadowBlur = 22;
-        fctx.lineWidth = 1;
-        fctx.strokeStyle = `rgba(255,255,255,${a*0.45})`;
-        fctx.stroke();
-
-        fctx.restore();
-
-        if (h.life > h.ttl) hearts.splice(i,1);
-      }
-
-      // Textos
-      fctx.globalCompositeOperation = "source-over";
-      for (let i=popTexts.length-1;i>=0;i--){
-        const pT = popTexts[i];
-        pT.life += dt;
-        pT.x += pT.vx * dt * 60;
-        pT.y += pT.vy * dt * 60;
-
-        const p = Math.min(1, pT.life/pT.ttl);
-        const a = (1-p);
-        const yLift = (1-p)*10;
-
-        fctx.save();
-        fctx.translate(pT.x, pT.y - yLift);
-        fctx.rotate(pT.rot*p);
-        const size = (16 + 10*(1-p)) * pT.scale;
-
-        fctx.font = `950 ${size}px ui-rounded, system-ui`;
-        fctx.textAlign = "center";
-        fctx.textBaseline = "middle";
-
-        fctx.shadowColor = "rgba(176,140,255,0.85)";
-        fctx.shadowBlur = 20;
-        fctx.fillStyle = `rgba(255,255,255,${a})`;
-        fctx.fillText(pT.txt, 0, 0);
-
-        fctx.shadowColor = "rgba(102,242,255,0.65)";
-        fctx.shadowBlur = 22;
-        fctx.fillStyle = `rgba(176,140,255,${a*0.34})`;
-        fctx.fillText(pT.txt, 0, 1);
-
-        fctx.restore();
-
-        if (pT.life > pT.ttl) popTexts.splice(i,1);
-      }
-    }
-
-    // ===== Interacción estrellas =====
-    let isDown = false;
-    let holdTimer = null;
-    let loveRainTimer = null;
-    let lastX = 0, lastY = 0;
-
-    function nearestStar(x,y){
-      let best = null, bestD = 1e9;
-      for (const st of stars){
-        const dx = st.x - x, dy = st.y - y;
-        const d = dx*dx + dy*dy;
-        if (d < bestD){ bestD = d; best = st; }
-      }
-      return {st: best, d2: bestD};
-    }
-
-    function showToast(text="✨ TE AMOOOOOO ✨"){
-      toast.textContent = text;
-      toast.classList.add("show");
-      clearTimeout(showToast._t);
-      showToast._t = setTimeout(()=>toast.classList.remove("show"), 1000);
-    }
-
-    let loveIndex = 0;
-    function loveRainStart(x, y){
-      clearInterval(loveRainTimer);
-      loveRainTimer = setInterval(()=>{
-        for (let k = 0; k < 2; k++){
-          const word = LOVE_WORDS[loveIndex % LOVE_WORDS.length];
-          loveIndex++;
-          addPopText(x + rand(-26, 26), y + rand(-26, 26), word);
-        }
-        addSparkles(x, y, 16);
-        addHeart(x, y, 1);
-      }, 110);
-    }
-    function loveRainStop(){ clearInterval(loveRainTimer); }
-
-    function pointerPos(e){
-      const t = e.touches ? e.touches[0] : e;
-      return {x: t.clientX, y: t.clientY};
-    }
-
-    function onDown(e){
-      // si el chibi capturó el pointer, no dispares estrellas
-      if (e.__chibiBlocked) return;
-
-      e.preventDefault();
-      const {x,y} = pointerPos(e);
-      isDown = true;
-      lastX = x; lastY = y;
-
-      clearTimeout(holdTimer);
-      holdTimer = setTimeout(()=>{
-        showToast("🫶 TE AMOOOOOO INFINITOOOOOO 😭💘");
-        loveRainStart(lastX,lastY);
-        startHoldVibe(); // ✅ vibra mientras mantenga presionado
-      }, 350);
-
-      const ns = nearestStar(x,y);
-      if (ns.st && ns.d2 < 2200){
-        const word = LOVE_WORDS[(Math.random()*LOVE_WORDS.length)|0];
-        addPopText(ns.st.x, ns.st.y, word);
-        addSparkles(ns.st.x, ns.st.y, 18);
-        addHeart(ns.st.x, ns.st.y, 2);
-        showToast("✨ " + (word.length > 18 ? "TE AMOOOOOO" : word) + " ✨");
+    const seq = setInterval(()=>{
+      if (i < SURPRISE_LINES.length){
+        const line = SURPRISE_LINES[i];
+        message.textContent = line;
+        const cx = W*0.5, cy = H*0.44;
+        addSparkles(cx,cy, 22);
+        addHeart(cx,cy, 3);
+        addPopText(cx, cy - 10, (i===4 ? "TE AMOOOOOO" : "AMO AMO AMOOOOO"));
+        showToast(line.includes("NAVIDAD") ? "🎄 FELIZ NAVIDAD 🎄" : "💜💙 TE AMOOOOOO 💜💙");
+        i++;
       } else {
-        addSparkles(x,y, 12);
-        addHeart(x,y, 2);
-        addPopText(x,y, "TE AMOOOOOO");
-        showToast();
+        clearInterval(seq);
+        setTimeout(()=>{
+          headline.textContent = originalH;
+          message.textContent = originalM;
+        }, 1200);
       }
-    }
+    }, 900);
+  }
+  surpriseBtn.addEventListener("click", runSurprise);
 
-    function onMove(e){
-      if (!isDown) return;
-      const {x,y} = pointerPos(e);
-      const dx = x - lastX, dy = y - lastY;
-      if (Math.hypot(dx,dy) > 14){
-        spawnComet(x,y, dx, dy);
-        if (Math.random() < 0.28) addSparkles(x,y, 7);
-        if (Math.random() < 0.22) addHeart(x,y, 1);
-      }
-      lastX = x; lastY = y;
-    }
+  // ===== Modes toggle =====
+  toggleModeBtn.addEventListener("click", ()=>{
+    mode = (mode + 1) % MODES.length;
+    applyMode(mode);
+  });
 
-    function onUp(){
-      isDown = false;
-      clearTimeout(holdTimer);
-      loveRainStop();
-      stopHoldVibe(); // ✅ corta vibración al soltar
-    }
-    
-        // =====================================
-    // TAP/DRAG GLOBAL (funciona encima de la UI)
-    // - Captura taps incluso sobre textos/cards
-    // - NO dispara si es un botón/elemento interactivo
-    // - NO interfiere con el chibi (ya hace stopPropagation)
-    // =====================================
-    
-    let activePointerId = null;
-    
-    function isInteractiveTarget(el){
-      if (!el) return false;
-      return !!el.closest(
-        "button, a, input, textarea, select, label, summary, details, [role='button'], .chibiWrap"
-      );
-    }
-    
-    function onGlobalDown(e){
-      // Si tocó un botón o algo interactivo, NO dispares estrellas
-      if (isInteractiveTarget(e.target)) return;
-    
-      // Evita scroll/selección en mobile y que la UI “se coma” gestos raros
-      e.preventDefault();
-    
-      // Solo un pointer activo (evita multitouch loco)
-      activePointerId = e.pointerId ?? 1;
-    
-      // Re-usa tu lógica existente
-      onDown(e);
-    }
-    
-    function onGlobalMove(e){
-      if (activePointerId == null) return;
-      if ((e.pointerId ?? 1) !== activePointerId) return;
-    
-      // Si estás arrastrando el chibi, no hagas cometas/estrellas
-      if (chibi && chibi.dragging) return;
-    
-      e.preventDefault();
-      onMove(e);
-    }
-    
-    function onGlobalUp(e){
-      if (activePointerId == null) return;
-      if ((e.pointerId ?? 1) !== activePointerId) return;
-    
-      activePointerId = null;
-      onUp(e);
-    }
-    
-    // Pointer Events (sirve para mouse + touch + stylus)
-    window.addEventListener("pointerdown", onGlobalDown, { passive:false, capture:true });
-    window.addEventListener("pointermove", onGlobalMove, { passive:false, capture:true });
-    window.addEventListener("pointerup", onGlobalUp, { passive:true, capture:true });
-    window.addEventListener("pointercancel", onGlobalUp, { passive:true, capture:true });
-    
-    // Si algún navegador viejo no soporta PointerEvents, fallback rápido:
-    if (!("PointerEvent" in window)){
-      window.addEventListener("mousedown", (e)=>{ if(!isInteractiveTarget(e.target)) onDown(e); }, true);
-      window.addEventListener("mousemove", (e)=>{ onMove(e); }, true);
-      window.addEventListener("mouseup", onUp, true);
-    
-      window.addEventListener("touchstart", (e)=>{ if(!isInteractiveTarget(e.target)) onDown(e); }, {passive:false, capture:true});
-      window.addEventListener("touchmove", onMove, {passive:false, capture:true});
-      window.addEventListener("touchend", onUp, {passive:true, capture:true});
-      window.addEventListener("touchcancel", onUp, {passive:true, capture:true});
-    }
+  // ===== Apodos: ciclo =====
+  let nickIndex = 0;
+  function applyNickname(){
+    const nick = NICKNAMES[nickIndex % NICKNAMES.length];
+    who.textContent = "PARA " + nick;
+    headline.textContent = nick + ", TÚ ERES MI UNIVERSO ENTERO.";
+  }
+  function nextNickname(){
+    nickIndex++;
+    applyNickname();
+    addSparkles(W*0.5, H*0.42, 22);
+    addHeart(W*0.5, H*0.42, 3);
+    addPopText(W*0.5, H*0.42, "TE AMOOOOOO");
+    showToast("💘 " + NICKNAMES[nickIndex % NICKNAMES.length] + " 💘");
+  }
+  nextNickBtn.addEventListener("click", nextNickname);
 
-
-    // ===== Surprise =====
-    function runSurprise(){
-      const originalM = message.textContent;
-      const originalH = headline.textContent;
-
-      headline.textContent = "AMORCITOOOO… MÍRAME AQUÍ<333";
-      message.textContent = "";
-      let i = 0;
-
-      const seq = setInterval(()=>{
-        if (i < SURPRISE_LINES.length){
-          const line = SURPRISE_LINES[i];
-          message.textContent = line;
-          const cx = W*0.5, cy = H*0.44;
-          addSparkles(cx,cy, 22);
-          addHeart(cx,cy, 3);
-          addPopText(cx, cy - 10, (i===4 ? "TE AMOOOOOO" : "AMO AMO AMOOOOO"));
-          showToast(line.includes("NAVIDAD") ? "🎄 FELIZ NAVIDAD 🎄" : "💜💙 TE AMOOOOOO 💜💙");
-          i++;
-        } else {
-          clearInterval(seq);
-          setTimeout(()=>{
-            headline.textContent = originalH;
-            message.textContent = originalM;
-          }, 1200);
-        }
-      }, 900);
-    }
-    surpriseBtn.addEventListener("click", runSurprise);
-
-    // ===== Modes toggle =====
-    toggleModeBtn.addEventListener("click", ()=>{
-      mode = (mode + 1) % MODES.length;
-      applyMode(mode);
-    });
-
-    // ===== Apodos: ciclo =====
-    let nickIndex = 0;
-    function applyNickname(){
-      const nick = NICKNAMES[nickIndex % NICKNAMES.length];
-      who.textContent = "PARA " + nick;
-      headline.textContent = nick + ", TÚ ERES MI UNIVERSO ENTERO.";
-    }
-    function nextNickname(){
-      nickIndex++;
+  setInterval(()=>{
+    if (overlay.classList.contains("hidden")){
+      nickIndex = (nickIndex+1) % NICKNAMES.length;
       applyNickname();
-      addSparkles(W*0.5, H*0.42, 22);
-      addHeart(W*0.5, H*0.42, 3);
-      addPopText(W*0.5, H*0.42, "TE AMOOOOOO");
-      showToast("💘 " + NICKNAMES[nickIndex % NICKNAMES.length] + " 💘");
     }
-    nextNickBtn.addEventListener("click", nextNickname);
+  }, 10000);
 
-    setInterval(()=>{
-      if (overlay.classList.contains("hidden")){
-        nickIndex = (nickIndex+1) % NICKNAMES.length;
-        applyNickname();
+  // ===== Start overlay =====
+  startBtn.addEventListener("click", ()=>{
+    overlay.classList.add("hidden");
+    const cx=W*0.5, cy=H*0.45;
+    addSparkles(cx,cy, 28);
+    addHeart(cx,cy, 4);
+    addPopText(cx,cy, "TE AMOOOOOO");
+    showToast("🌌 YA ESTÁS AQUÍ, MI AMOR 🌌");
+  });
+
+  // ==========================================
+  // CHIBI: LIBRE + SLINGSHOT + SPIN + THROW
+  // ==========================================
+  function chibiRect(){ return chibiWrap.getBoundingClientRect(); }
+  function chibiSize(){
+    const r = chibiRect();
+    return {w:r.width, h:r.height};
+  }
+
+  const chibi = {
+    x: 14,
+    y: Math.round(window.innerHeight * 0.60),
+    vx: 0, vy: 0,
+    angle: 0, omega: 0,
+    dragging: false,
+    friction: 0.992,
+    bounce: 0.78,
+    maxSpeed: 3400,
+    maxOmega: 18,
+    k: 2200,
+    d: 34,
+    lastT: performance.now(),
+    tx: 14,
+    ty: Math.round(window.innerHeight * 0.60),
+    ox: 0, oy: 0
+  };
+
+  function setChibiXYRaw(x,y){
+    chibiWrap.style.left = x + "px";
+    chibiWrap.style.top  = y + "px";
+  }
+
+  function clampChibiInside(){
+    const pad = 8;
+    const {w,h} = chibiSize();
+    chibi.x = clamp(chibi.x, pad, W - w - pad);
+    chibi.y = clamp(chibi.y, pad, H - h - pad);
+    chibi.tx = clamp(chibi.tx, pad, W - w - pad);
+    chibi.ty = clamp(chibi.ty, pad, H - h - pad);
+    setChibiXYRaw(chibi.x, chibi.y);
+  }
+
+  function chibiCenter(){
+    const {w,h} = chibiSize();
+    return { x: chibi.x + w/2, y: chibi.y + h/2 };
+  }
+
+  function chibiBoop(strong=false){
+    chibiWrap.classList.add("boop");
+    clearTimeout(chibiBoop._t);
+    chibiBoop._t = setTimeout(()=>chibiWrap.classList.remove("boop"), 420);
+
+    const c = chibiCenter();
+    addSparkles(c.x,c.y, strong ? 30 : 16);
+    addHeart(c.x,c.y, strong ? 5 : 2);
+    addPopText(c.x, c.y - 10, strong ? "TE AMOOOOO JAKSDJ 💜💙" : "MUAAAAA TE COMOOOOOO 💘");
+  }
+
+  const motion = [];
+  function pushMotion(x,y){
+    const t = performance.now();
+    motion.push({t,x,y});
+    while (motion.length && (t - motion[0].t) > 170) motion.shift();
+  }
+  function velocityFromMotion(){
+    if (motion.length < 2) return {vx:0, vy:0};
+    const a = motion[0];
+    const b = motion[motion.length-1];
+    const dt = (b.t - a.t)/1000;
+    if (dt <= 0) return {vx:0, vy:0};
+    return {vx:(b.x-a.x)/dt, vy:(b.y-a.y)/dt};
+  }
+
+  function applyThrow(vx,vy,extraSpin=0){
+    let sp = Math.hypot(vx,vy);
+    if (sp > chibi.maxSpeed){
+      const k = chibi.maxSpeed / sp;
+      vx*=k; vy*=k;
+    }
+
+    setChibiFaceFromVX(vx);
+    haptic([10, 25, 10]);
+
+    chibi.vx = vx;
+    chibi.vy = vy;
+
+    const spin = clamp((vx + vy) / 800 + extraSpin, -chibi.maxOmega, chibi.maxOmega);
+    chibi.omega = spin;
+
+    const c = chibiCenter();
+    spawnComet(c.x,c.y, vx*0.12, vy*0.12);
+    addSparkles(c.x,c.y, 22);
+    addHeart(c.x,c.y, 2);
+  }
+
+  function funnyPop(){
+    const words = ["💜💙"];
+    const w = words[(Math.random()*words.length)|0];
+    showToast(w);
+    const c = chibiCenter();
+    addPopText(c.x, c.y - 20, w);
+  }
+
+  function chibiTick(now){
+    const dt = Math.min(0.034, (now - chibi.lastT)/1000);
+    chibi.lastT = now;
+
+    const pad = 8;
+    const {w,h} = chibiSize();
+
+    if (chibi.dragging){
+      const dx = chibi.tx - chibi.x;
+      const dy = chibi.ty - chibi.y;
+
+      const ax = chibi.k*dx - chibi.d*chibi.vx;
+      const ay = chibi.k*dy - chibi.d*chibi.vy;
+
+      chibi.vx += ax * dt;
+      chibi.vy += ay * dt;
+
+      const sp = Math.hypot(chibi.vx, chibi.vy);
+      if (sp > chibi.maxSpeed*0.85){
+        const kk = (chibi.maxSpeed*0.85)/sp;
+        chibi.vx *= kk;
+        chibi.vy *= kk;
       }
-    }, 10000);
 
-    // ===== Start overlay =====
-    startBtn.addEventListener("click", ()=>{
-      overlay.classList.add("hidden");
-      const cx=W*0.5, cy=H*0.45;
-      addSparkles(cx,cy, 28);
-      addHeart(cx,cy, 4);
-      addPopText(cx,cy, "TE AMOOOOOO");
-      showToast("🌌 YA ESTÁS AQUÍ, MI AMOR 🌌");
-    });
+      chibi.x += chibi.vx * dt;
+      chibi.y += chibi.vy * dt;
 
-    // ==========================================
-    // CHIBI: LIBRE + SLINGSHOT + SPIN + THROW 
-    // ==========================================
-    function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
-    function lerp(a,b,t){ return a + (b-a)*t; }
+      const want = clamp((chibi.vx - chibi.vy)/1200, -2.2, 2.2);
+      chibi.omega = lerp(chibi.omega, want, 1 - Math.pow(0.07, dt*60));
+      chibi.angle += chibi.omega * dt;
 
-    function chibiRect(){ return chibiWrap.getBoundingClientRect(); }
-    function chibiSize(){
-      const r = chibiRect();
-      return {w:r.width, h:r.height};
+      if (overlay.classList.contains("hidden") && Math.random() < 0.16){
+        const c = chibiCenter();
+        addHeart(c.x, c.y, 1);
+        if (Math.random() < 0.6) addSparkles(c.x, c.y, 6);
+      }
+    } else {
+      chibi.x += chibi.vx * dt;
+      chibi.y += chibi.vy * dt;
+
+      const decay = Math.pow(chibi.friction, dt*60);
+      chibi.vx *= decay;
+      chibi.vy *= decay;
+
+      chibi.omega *= Math.pow(0.93, dt*60);
+      chibi.angle += chibi.omega * dt;
+
+      if (Math.hypot(chibi.vx, chibi.vy) < 10){
+        chibi.vx = 0; chibi.vy = 0;
+      }
+
+      let bounced = false;
+
+      if (chibi.x < pad){
+        chibi.x = pad;
+        chibi.vx = Math.abs(chibi.vx) * chibi.bounce;
+        chibi.omega += rand(-3,3);
+        bounced = true;
+      } else if (chibi.x > W - w - pad){
+        chibi.x = W - w - pad;
+        chibi.vx = -Math.abs(chibi.vx) * chibi.bounce;
+        chibi.omega += rand(-3,3);
+        bounced = true;
+      }
+
+      if (chibi.y < pad){
+        chibi.y = pad;
+        chibi.vy = Math.abs(chibi.vy) * chibi.bounce;
+        chibi.omega += rand(-3,3);
+        bounced = true;
+      } else if (chibi.y > H - h - pad){
+        chibi.y = H - h - pad;
+        chibi.vy = -Math.abs(chibi.vy) * chibi.bounce;
+        chibi.omega += rand(-3,3);
+        bounced = true;
+      }
+
+      if (bounced){
+        chibiBoop(false);
+        if (Math.random() < 0.35) funnyPop();
+      }
+
+      if (overlay.classList.contains("hidden")){
+        const sp = Math.hypot(chibi.vx, chibi.vy);
+        if (sp > 420 && Math.random() < 0.26){
+          const c = chibiCenter();
+          if (Math.random() < 0.7) addSparkles(c.x, c.y, 8);
+          if (Math.random() < 0.55) addHeart(c.x, c.y, 1);
+          if (Math.random() < 0.35) spawnComet(c.x, c.y, chibi.vx*0.07, chibi.vy*0.07);
+        }
+      }
     }
 
-    const chibi = {
+    setChibiXYRaw(chibi.x, chibi.y);
+
+    const tilt = clamp(chibi.vx / 1400, -1.2, 1.2);
+    const rot = chibi.angle + tilt*0.25;
+    chibiWrap.style.transform = `rotate(${rot}rad)`;
+
+    requestAnimationFrame(chibiTick);
+  }
+
+  // Pointer events del chibi
+  chibiWrap.addEventListener("pointerdown", (e)=>{
+    if (!overlay.classList.contains("hidden")) return;
+    e.preventDefault();
+    haptic(12);
+    e.stopPropagation();
+    e.__chibiBlocked = true;
+
+    chibiWrap.setPointerCapture(e.pointerId);
+    chibi.dragging = true;
+
+    const r = chibiRect();
+    chibi.ox = e.clientX - r.left;
+    chibi.oy = e.clientY - r.top;
+
+    chibi.tx = chibi.x;
+    chibi.ty = chibi.y;
+
+    motion.length = 0;
+    pushMotion(e.clientX, e.clientY);
+
+    chibiTag.textContent = "Agarra el dibujito como si fuera yo aaaaa";
+    chibiBoop(false);
+    showToast("AGÁRRAME 😭💜💙");
+  }, {passive:false});
+
+  window.addEventListener("pointermove", (e)=>{
+    if (!chibi.dragging) return;
+
+    chibi.tx = e.clientX - chibi.ox;
+    chibi.ty = e.clientY - chibi.oy;
+
+    const {w,h} = chibiSize();
+    const pad = 8;
+    chibi.tx = clamp(chibi.tx, pad, W - w - pad);
+    chibi.ty = clamp(chibi.ty, pad, H - h - pad);
+
+    pushMotion(e.clientX, e.clientY);
+
+    if (overlay.classList.contains("hidden") && Math.random() < 0.12){
+      addSparkles(e.clientX, e.clientY, 6);
+      if (Math.random() < 0.45) addHeart(e.clientX, e.clientY, 1);
+    }
+  }, {passive:true});
+
+  function releaseChibi(){
+    if (!chibi.dragging) return;
+    chibi.dragging = false;
+
+    chibiTag.textContent = "💜💙 TOCA / ARRASTRA";
+    const v = velocityFromMotion();
+
+    const BOOST = 1.95;
+    const THRESH = 260;
+    const vx = v.vx * BOOST;
+    const vy = v.vy * BOOST;
+    const sp = Math.hypot(vx, vy);
+
+    const extraSpin = clamp(v.vx / 600, -6, 6);
+
+    if (sp > THRESH){
+      applyThrow(vx, vy, extraSpin);
+      if (Math.random() < 0.8) funnyPop();
+    } else {
+      applyThrow((Math.random()-0.5)*450, (Math.random()-0.5)*350, (Math.random()-0.5)*3);
+      showToast("BOOP 💘");
+    }
+
+    motion.length = 0;
+  }
+
+  window.addEventListener("pointerup", releaseChibi, {passive:true});
+  window.addEventListener("pointercancel", releaseChibi, {passive:true});
+
+  chibiWrap.addEventListener("click", (e)=>{
+    if (!overlay.classList.contains("hidden")) return;
+    if (chibi.dragging) return;
+
+    e.stopPropagation();
+    chibiBoop(true);
+
+    const c = chibiCenter();
+    addPopText(c.x, c.y - 10, "💜💙 TE AMOOOOOO 💙💜");
+
+    const ang = rand(-Math.PI, Math.PI);
+    applyThrow(Math.cos(ang)*900, Math.sin(ang)*750, rand(-4,4));
+    funnyPop();
+  });
+
+  chibiImg.addEventListener("error", ()=>{
+    console.warn('No se pudo cargar "asd.png". Asegúrate de que el archivo esté en el mismo folder que el HTML y se llame exactamente asd.png');
+  });
+
+  // ==========================================
+  // SPRITES EXTRA (2 FOTOS) = MISMO MOTOR QUE CHIBI
+  // ==========================================
+  function rectOf(el){ return el.getBoundingClientRect(); }
+  function sizeOf(el){ const r = rectOf(el); return {w:r.width, h:r.height}; }
+
+  function makeSpriteMotor(wrap){
+    if (!wrap) return null;
+
+    const s = {
+      wrap,
       x: 14,
-      y: Math.round(window.innerHeight * 0.60),
-      vx: 0,
-      vy: 0,
-      angle: 0,
-      omega: 0,
+      y: Math.round(window.innerHeight * 0.30),
+      vx: 0, vy: 0,
+      angle: 0, omega: 0,
       dragging: false,
-      friction: 0.992,   // más suave / dura más
+      friction: 0.992,
       bounce: 0.78,
-      maxSpeed: 3400,    // más fuerte
+      maxSpeed: 3400,
       maxOmega: 18,
-      k: 2200,           // spring stiffness
-      d: 34,             // damping
+      k: 2200,
+      d: 34,
       lastT: performance.now(),
       tx: 14,
-      ty: Math.round(window.innerHeight * 0.60),
-      ox: 0,
-      oy: 0
+      ty: Math.round(window.innerHeight * 0.30),
+      ox: 0, oy: 0,
+      motion: []
     };
 
-    function setChibiXYRaw(x,y){
-      chibiWrap.style.left = x + "px";
-      chibiWrap.style.top  = y + "px";
+    function setXY(x,y){
+      wrap.style.left = x + "px";
+      wrap.style.top  = y + "px";
     }
-
-    function clampChibiInside(){
-      const pad = 8;
-      const {w,h} = chibiSize();
-      chibi.x = clamp(chibi.x, pad, W - w - pad);
-      chibi.y = clamp(chibi.y, pad, H - h - pad);
-      chibi.tx = clamp(chibi.tx, pad, W - w - pad);
-      chibi.ty = clamp(chibi.ty, pad, H - h - pad);
-      setChibiXYRaw(chibi.x, chibi.y);
+    function center(){
+      const {w,h} = sizeOf(wrap);
+      return {x: s.x + w/2, y: s.y + h/2};
     }
+    function boop(strong=false){
+      wrap.classList.add("boop");
+      clearTimeout(wrap._bt);
+      wrap._bt = setTimeout(()=>wrap.classList.remove("boop"), 420);
 
-    function chibiCenter(){
-      const {w,h} = chibiSize();
-      return { x: chibi.x + w/2, y: chibi.y + h/2 };
-    }
-
-    function chibiBoop(strong=false){
-      chibiWrap.classList.add("boop");
-      clearTimeout(chibiBoop._t);
-      chibiBoop._t = setTimeout(()=>chibiWrap.classList.remove("boop"), 420);
-
-      const c = chibiCenter();
+      const c = center();
       addSparkles(c.x,c.y, strong ? 30 : 16);
       addHeart(c.x,c.y, strong ? 5 : 2);
-      addPopText(c.x, c.y - 10, strong ? "TE AMOOOOO JAKSDJ 💜💙" : "MUAAAAA TE COMOOOOOO 💘");
+      addPopText(c.x, c.y - 10, strong ? "TE AMOOOOOO 😭💜💙" : "MUA 💘");
     }
-
-    const motion = [];
     function pushMotion(x,y){
       const t = performance.now();
-      motion.push({t,x,y});
-      while (motion.length && (t - motion[0].t) > 170) motion.shift();
+      s.motion.push({t,x,y});
+      while (s.motion.length && (t - s.motion[0].t) > 170) s.motion.shift();
     }
-    function velocityFromMotion(){
-      if (motion.length < 2) return {vx:0, vy:0};
-      const a = motion[0];
-      const b = motion[motion.length-1];
+    function velFromMotion(){
+      if (s.motion.length < 2) return {vx:0, vy:0};
+      const a = s.motion[0];
+      const b = s.motion[s.motion.length-1];
       const dt = (b.t - a.t)/1000;
       if (dt <= 0) return {vx:0, vy:0};
       return {vx:(b.x-a.x)/dt, vy:(b.y-a.y)/dt};
     }
-
-    function applyThrow(vx,vy,extraSpin=0){
+    function applyThrowSprite(vx,vy,extraSpin=0){
       let sp = Math.hypot(vx,vy);
-      if (sp > chibi.maxSpeed){
-        const k = chibi.maxSpeed / sp;
-        vx*=k; vy*=k;
-        sp = chibi.maxSpeed;
+      if (sp > s.maxSpeed){
+        const kk = s.maxSpeed / sp;
+        vx*=kk; vy*=kk;
       }
+      s.vx = vx; s.vy = vy;
+      s.omega = clamp((vx + vy) / 800 + extraSpin, -s.maxOmega, s.maxOmega);
 
-      setChibiFaceFromVX(vx); // ✅ mira hacia donde lo lanzan
-      haptic([10, 25, 10]);   // ✅ vibración al soltar/lanzar
-
-      chibi.vx = vx;
-      chibi.vy = vy;
-
-      const spin = clamp((vx + vy) / 800 + extraSpin, -chibi.maxOmega, chibi.maxOmega);
-      chibi.omega = spin;
-
-      const c = chibiCenter();
+      const c = center();
       spawnComet(c.x,c.y, vx*0.12, vy*0.12);
-      addSparkles(c.x,c.y, 22);
+      addSparkles(c.x,c.y, 18);
       addHeart(c.x,c.y, 2);
+      haptic([10,25,10]);
     }
 
-    function funnyPop(){
-      const words = ["💜💙"];
-      const w = words[(Math.random()*words.length)|0];
-      showToast(w);
-      const c = chibiCenter();
-      addPopText(c.x, c.y - 20, w);
+    function clampInside(){
+      const pad = 8;
+      const {w,h} = sizeOf(wrap);
+      s.x = clamp(s.x, pad, W - w - pad);
+      s.y = clamp(s.y, pad, H - h - pad);
+      s.tx = clamp(s.tx, pad, W - w - pad);
+      s.ty = clamp(s.ty, pad, H - h - pad);
+      setXY(s.x,s.y);
     }
 
-    function chibiTick(now){
-      const dt = Math.min(0.034, (now - chibi.lastT)/1000);
-      chibi.lastT = now;
+    function tick(now){
+      const dt = Math.min(0.034, (now - s.lastT)/1000);
+      s.lastT = now;
 
       const pad = 8;
-      const {w,h} = chibiSize();
+      const {w,h} = sizeOf(wrap);
 
-      if (chibi.dragging){
-        const dx = chibi.tx - chibi.x;
-        const dy = chibi.ty - chibi.y;
+      if (s.dragging){
+        const dx = s.tx - s.x;
+        const dy = s.ty - s.y;
+        const ax = s.k*dx - s.d*s.vx;
+        const ay = s.k*dy - s.d*s.vy;
 
-        const ax = chibi.k*dx - chibi.d*chibi.vx;
-        const ay = chibi.k*dy - chibi.d*chibi.vy;
+        s.vx += ax * dt;
+        s.vy += ay * dt;
 
-        chibi.vx += ax * dt;
-        chibi.vy += ay * dt;
-
-        const sp = Math.hypot(chibi.vx, chibi.vy);
-        if (sp > chibi.maxSpeed*0.85){
-          const kk = (chibi.maxSpeed*0.85)/sp;
-          chibi.vx *= kk;
-          chibi.vy *= kk;
+        const sp = Math.hypot(s.vx, s.vy);
+        if (sp > s.maxSpeed*0.85){
+          const kk = (s.maxSpeed*0.85)/sp;
+          s.vx *= kk; s.vy *= kk;
         }
 
-        chibi.x += chibi.vx * dt;
-        chibi.y += chibi.vy * dt;
+        s.x += s.vx * dt;
+        s.y += s.vy * dt;
 
-        const want = clamp((chibi.vx - chibi.vy)/1200, -2.2, 2.2);
-        chibi.omega = lerp(chibi.omega, want, 1 - Math.pow(0.07, dt*60));
-        chibi.angle += chibi.omega * dt;
-
-        if (overlay.classList.contains("hidden") && Math.random() < 0.16){
-          const c = chibiCenter();
-          addHeart(c.x, c.y, 1);
-          if (Math.random() < 0.6) addSparkles(c.x, c.y, 6);
-        }
+        const want = clamp((s.vx - s.vy)/1200, -2.2, 2.2);
+        s.omega = lerp(s.omega, want, 1 - Math.pow(0.07, dt*60));
+        s.angle += s.omega * dt;
       } else {
-        chibi.x += chibi.vx * dt;
-        chibi.y += chibi.vy * dt;
+        s.x += s.vx * dt;
+        s.y += s.vy * dt;
 
-        const decay = Math.pow(chibi.friction, dt*60);
-        chibi.vx *= decay;
-        chibi.vy *= decay;
+        const decay = Math.pow(s.friction, dt*60);
+        s.vx *= decay;
+        s.vy *= decay;
 
-        chibi.omega *= Math.pow(0.93, dt*60);
-        chibi.angle += chibi.omega * dt;
-
-        if (Math.hypot(chibi.vx, chibi.vy) < 10){
-          chibi.vx = 0; chibi.vy = 0;
-        }
+        s.omega *= Math.pow(0.93, dt*60);
+        s.angle += s.omega * dt;
 
         let bounced = false;
 
-        if (chibi.x < pad){
-          chibi.x = pad;
-          chibi.vx = Math.abs(chibi.vx) * chibi.bounce;
-          chibi.omega += rand(-3,3);
-          bounced = true;
-        } else if (chibi.x > W - w - pad){
-          chibi.x = W - w - pad;
-          chibi.vx = -Math.abs(chibi.vx) * chibi.bounce;
-          chibi.omega += rand(-3,3);
-          bounced = true;
-        }
+        if (s.x < pad){ s.x = pad; s.vx = Math.abs(s.vx)*s.bounce; s.omega += rand(-3,3); bounced = true; }
+        else if (s.x > W - w - pad){ s.x = W - w - pad; s.vx = -Math.abs(s.vx)*s.bounce; s.omega += rand(-3,3); bounced = true; }
 
-        if (chibi.y < pad){
-          chibi.y = pad;
-          chibi.vy = Math.abs(chibi.vy) * chibi.bounce;
-          chibi.omega += rand(-3,3);
-          bounced = true;
-        } else if (chibi.y > H - h - pad){
-          chibi.y = H - h - pad;
-          chibi.vy = -Math.abs(chibi.vy) * chibi.bounce;
-          chibi.omega += rand(-3,3);
-          bounced = true;
-        }
+        if (s.y < pad){ s.y = pad; s.vy = Math.abs(s.vy)*s.bounce; s.omega += rand(-3,3); bounced = true; }
+        else if (s.y > H - h - pad){ s.y = H - h - pad; s.vy = -Math.abs(s.vy)*s.bounce; s.omega += rand(-3,3); bounced = true; }
 
-        if (bounced){
-          chibiBoop(false);
-          if (Math.random() < 0.35) funnyPop();
-        }
-
-        if (overlay.classList.contains("hidden")){
-          const sp = Math.hypot(chibi.vx, chibi.vy);
-          if (sp > 420 && Math.random() < 0.26){
-            const c = chibiCenter();
-            if (Math.random() < 0.7) addSparkles(c.x, c.y, 8);
-            if (Math.random() < 0.55) addHeart(c.x, c.y, 1);
-            if (Math.random() < 0.35) spawnComet(c.x, c.y, chibi.vx*0.07, chibi.vy*0.07);
-          }
-        }
+        if (bounced) boop(false);
       }
 
-      setChibiXYRaw(chibi.x, chibi.y);
-
-      const tilt = clamp(chibi.vx / 1400, -1.2, 1.2);
-      const rot = chibi.angle + tilt*0.25;
-      chibiWrap.style.transform = `rotate(${rot}rad)`;
-
-      requestAnimationFrame(chibiTick);
+      setXY(s.x,s.y);
+      const tilt = clamp(s.vx / 1400, -1.2, 1.2);
+      wrap.style.transform = `rotate(${(s.angle + tilt*0.25)}rad)`;
     }
 
-    // Pointer events
-    chibiWrap.addEventListener("pointerdown", (e)=>{
+    wrap.addEventListener("pointerdown", (e)=>{
       if (!overlay.classList.contains("hidden")) return;
-
       e.preventDefault();
-      haptic(12);
       e.stopPropagation();
       e.__chibiBlocked = true;
 
-      chibiWrap.setPointerCapture(e.pointerId);
-      chibi.dragging = true;
+      wrap.setPointerCapture(e.pointerId);
+      s.dragging = true;
 
-      const r = chibiRect();
-      chibi.ox = e.clientX - r.left;
-      chibi.oy = e.clientY - r.top;
+      const r = rectOf(wrap);
+      s.ox = e.clientX - r.left;
+      s.oy = e.clientY - r.top;
 
-      chibi.tx = chibi.x;
-      chibi.ty = chibi.y;
-
-      motion.length = 0;
+      s.tx = s.x; s.ty = s.y;
+      s.motion.length = 0;
       pushMotion(e.clientX, e.clientY);
 
-      chibiTag.textContent = "Agarra el dibujito como si fuera yo aaaaa";
-      chibiBoop(false);
+      boop(false);
       showToast("AGÁRRAME 😭💜💙");
+      haptic(12);
     }, {passive:false});
 
     window.addEventListener("pointermove", (e)=>{
-      if (!chibi.dragging) return;
+      if (!s.dragging) return;
 
-      chibi.tx = e.clientX - chibi.ox;
-      chibi.ty = e.clientY - chibi.oy;
+      s.tx = e.clientX - s.ox;
+      s.ty = e.clientY - s.oy;
 
-      const {w,h} = chibiSize();
+      const {w,h} = sizeOf(wrap);
       const pad = 8;
-      chibi.tx = clamp(chibi.tx, pad, W - w - pad);
-      chibi.ty = clamp(chibi.ty, pad, H - h - pad);
+      s.tx = clamp(s.tx, pad, W - w - pad);
+      s.ty = clamp(s.ty, pad, H - h - pad);
 
       pushMotion(e.clientX, e.clientY);
-
-      if (overlay.classList.contains("hidden") && Math.random() < 0.12){
-        addSparkles(e.clientX, e.clientY, 6);
-        if (Math.random() < 0.45) addHeart(e.clientX, e.clientY, 1);
-      }
     }, {passive:true});
 
-    function releaseChibi(){
-      if (!chibi.dragging) return;
-      chibi.dragging = false;
+    function release(){
+      if (!s.dragging) return;
+      s.dragging = false;
 
-      chibiTag.textContent = "💜💙 TOCA / ARRASTRA";
-
-      const v = velocityFromMotion();
-
+      const v = velFromMotion();
       const BOOST = 1.95;
       const THRESH = 260;
+
       const vx = v.vx * BOOST;
       const vy = v.vy * BOOST;
-      const sp = Math.hypot(vx, vy);
-
+      const sp = Math.hypot(vx,vy);
       const extraSpin = clamp(v.vx / 600, -6, 6);
 
-      if (sp > THRESH){
-        applyThrow(vx, vy, extraSpin);
-        if (Math.random() < 0.8) funnyPop();
-      } else {
-        applyThrow((Math.random()-0.5)*450, (Math.random()-0.5)*350, (Math.random()-0.5)*3);
-        showToast("BOOP 💘");
-      }
+      if (sp > THRESH) applyThrowSprite(vx,vy,extraSpin);
+      else applyThrowSprite((Math.random()-0.5)*450, (Math.random()-0.5)*350, (Math.random()-0.5)*3);
 
-      motion.length = 0;
+      s.motion.length = 0;
     }
 
-    window.addEventListener("pointerup", releaseChibi, {passive:true});
-    window.addEventListener("pointercancel", releaseChibi, {passive:true});
+    window.addEventListener("pointerup", release, {passive:true});
+    window.addEventListener("pointercancel", release, {passive:true});
 
-    chibiWrap.addEventListener("click", (e)=>{
+    wrap.addEventListener("click", (e)=>{
       if (!overlay.classList.contains("hidden")) return;
-      if (chibi.dragging) return;
-
+      if (s.dragging) return;
       e.stopPropagation();
-
-      chibiBoop(true);
-      const c = chibiCenter();
+      boop(true);
+      const c = center();
       addPopText(c.x, c.y - 10, "💜💙 TE AMOOOOOO 💙💜");
-
       const ang = rand(-Math.PI, Math.PI);
-      applyThrow(Math.cos(ang)*900, Math.sin(ang)*750, rand(-4,4));
-      funnyPop();
+      applyThrowSprite(Math.cos(ang)*900, Math.sin(ang)*750, rand(-4,4));
     });
 
-    chibiImg.addEventListener("error", ()=>{
-      console.warn('No se pudo cargar "asd.png". Asegúrate de que el archivo esté en el mismo folder que el HTML y se llame exactamente asd.png');
-    });
+    return {s, tick, clampInside, center, boop};
+  }
 
-    // ==========================================
-    // SPRITES EXTRA (2 FOTOS) = MISMO MOTOR QUE CHIBI
-    // + COLISIONES ENTRE LOS 3
-    // ==========================================
-    
-    // refs fotos
-    const sprPhotoA = document.getElementById("sprPhotoA");
-    const sprPhotoB = document.getElementById("sprPhotoB");
-    
-    // helper rect
-    function rectOf(el){ return el.getBoundingClientRect(); }
-    function sizeOf(el){ const r = rectOf(el); return {w:r.width, h:r.height}; }
-    
-    // “mini-motor” reutilizando la misma física del chibi
-    function makeSpriteMotor(wrap){
-      const s = {
-        wrap,
-        x: 14,
-        y: Math.round(window.innerHeight * 0.30),
-        vx: 0,
-        vy: 0,
-        angle: 0,
-        omega: 0,
-        dragging: false,
-        friction: 0.992,
-        bounce: 0.78,
-        maxSpeed: 3400,
-        maxOmega: 18,
-        k: 2200,
-        d: 34,
-        lastT: performance.now(),
-        tx: 14,
-        ty: Math.round(window.innerHeight * 0.30),
-        ox: 0,
-        oy: 0,
-        motion: []
-      };
-    
-      function setXY(x,y){
-        wrap.style.left = x + "px";
-        wrap.style.top  = y + "px";
-      }
-      function center(){
-        const {w,h} = sizeOf(wrap);
-        return {x: s.x + w/2, y: s.y + h/2};
-      }
-      function boop(strong=false){
-        wrap.classList.add("boop");
-        clearTimeout(wrap._bt);
-        wrap._bt = setTimeout(()=>wrap.classList.remove("boop"), 420);
-    
-        const c = center();
-        addSparkles(c.x,c.y, strong ? 30 : 16);
-        addHeart(c.x,c.y, strong ? 5 : 2);
-        addPopText(c.x, c.y - 10, strong ? "TE AMOOOOOO 😭💜💙" : "MUA 💘");
-      }
-      function pushMotion(x,y){
-        const t = performance.now();
-        s.motion.push({t,x,y});
-        while (s.motion.length && (t - s.motion[0].t) > 170) s.motion.shift();
-      }
-      function velFromMotion(){
-        if (s.motion.length < 2) return {vx:0, vy:0};
-        const a = s.motion[0];
-        const b = s.motion[s.motion.length-1];
-        const dt = (b.t - a.t)/1000;
-        if (dt <= 0) return {vx:0, vy:0};
-        return {vx:(b.x-a.x)/dt, vy:(b.y-a.y)/dt};
-      }
-      function applyThrow(vx,vy,extraSpin=0){
-        let sp = Math.hypot(vx,vy);
-        if (sp > s.maxSpeed){
-          const kk = s.maxSpeed / sp;
-          vx*=kk; vy*=kk;
-        }
-        s.vx = vx; s.vy = vy;
-        s.omega = clamp((vx + vy) / 800 + extraSpin, -s.maxOmega, s.maxOmega);
-    
-        const c = center();
-        spawnComet(c.x,c.y, vx*0.12, vy*0.12);
-        addSparkles(c.x,c.y, 18);
-        addHeart(c.x,c.y, 2);
-        haptic([10,25,10]);
-      }
-    
-      function clampInside(){
-        const pad = 8;
-        const {w,h} = sizeOf(wrap);
-        s.x = clamp(s.x, pad, W - w - pad);
-        s.y = clamp(s.y, pad, H - h - pad);
-        s.tx = clamp(s.tx, pad, W - w - pad);
-        s.ty = clamp(s.ty, pad, H - h - pad);
-        setXY(s.x,s.y);
-      }
-    
-      function tick(now){
-        const dt = Math.min(0.034, (now - s.lastT)/1000);
-        s.lastT = now;
-    
-        const pad = 8;
-        const {w,h} = sizeOf(wrap);
-    
-        if (s.dragging){
-          const dx = s.tx - s.x;
-          const dy = s.ty - s.y;
-          const ax = s.k*dx - s.d*s.vx;
-          const ay = s.k*dy - s.d*s.vy;
-    
-          s.vx += ax * dt;
-          s.vy += ay * dt;
-    
-          const sp = Math.hypot(s.vx, s.vy);
-          if (sp > s.maxSpeed*0.85){
-            const kk = (s.maxSpeed*0.85)/sp;
-            s.vx *= kk; s.vy *= kk;
-          }
-    
-          s.x += s.vx * dt;
-          s.y += s.vy * dt;
-    
-          const want = clamp((s.vx - s.vy)/1200, -2.2, 2.2);
-          s.omega = lerp(s.omega, want, 1 - Math.pow(0.07, dt*60));
-          s.angle += s.omega * dt;
-    
-          if (overlay.classList.contains("hidden") && Math.random() < 0.12){
-            const c = center();
-            addSparkles(c.x,c.y, 6);
-            if (Math.random() < 0.45) addHeart(c.x,c.y, 1);
-          }
-        } else {
-          s.x += s.vx * dt;
-          s.y += s.vy * dt;
-    
-          const decay = Math.pow(s.friction, dt*60);
-          s.vx *= decay;
-          s.vy *= decay;
-    
-          s.omega *= Math.pow(0.93, dt*60);
-          s.angle += s.omega * dt;
-    
-          let bounced = false;
-    
-          if (s.x < pad){ s.x = pad; s.vx = Math.abs(s.vx)*s.bounce; s.omega += rand(-3,3); bounced = true; }
-          else if (s.x > W - w - pad){ s.x = W - w - pad; s.vx = -Math.abs(s.vx)*s.bounce; s.omega += rand(-3,3); bounced = true; }
-    
-          if (s.y < pad){ s.y = pad; s.vy = Math.abs(s.vy)*s.bounce; s.omega += rand(-3,3); bounced = true; }
-          else if (s.y > H - h - pad){ s.y = H - h - pad; s.vy = -Math.abs(s.vy)*s.bounce; s.omega += rand(-3,3); bounced = true; }
-    
-          if (bounced) boop(false);
-        }
-    
-        setXY(s.x,s.y);
-        const tilt = clamp(s.vx / 1400, -1.2, 1.2);
-        wrap.style.transform = `rotate(${(s.angle + tilt*0.25)}rad)`;
-      }
-    
-      // events
-      wrap.addEventListener("pointerdown", (e)=>{
-        if (!overlay.classList.contains("hidden")) return;
-        e.preventDefault();
-        e.stopPropagation();
-        e.__chibiBlocked = true;
-    
-        wrap.setPointerCapture(e.pointerId);
-        s.dragging = true;
-    
-        const r = rectOf(wrap);
-        s.ox = e.clientX - r.left;
-        s.oy = e.clientY - r.top;
-    
-        s.tx = s.x; s.ty = s.y;
-        s.motion.length = 0;
-        pushMotion(e.clientX, e.clientY);
-    
-        boop(false);
-        showToast("AGÁRRAME 😭💜💙");
-        haptic(12);
-      }, {passive:false});
-    
-      window.addEventListener("pointermove", (e)=>{
-        if (!s.dragging) return;
-    
-        s.tx = e.clientX - s.ox;
-        s.ty = e.clientY - s.oy;
-    
-        const {w,h} = sizeOf(wrap);
-        const pad = 8;
-        s.tx = clamp(s.tx, pad, W - w - pad);
-        s.ty = clamp(s.ty, pad, H - h - pad);
-    
-        pushMotion(e.clientX, e.clientY);
-      }, {passive:true});
-    
-      function release(){
-        if (!s.dragging) return;
-        s.dragging = false;
-    
-        const v = velFromMotion();
-        const BOOST = 1.95;
-        const THRESH = 260;
-    
-        const vx = v.vx * BOOST;
-        const vy = v.vy * BOOST;
-        const sp = Math.hypot(vx,vy);
-        const extraSpin = clamp(v.vx / 600, -6, 6);
-    
-        if (sp > THRESH) applyThrow(vx,vy,extraSpin);
-        else applyThrow((Math.random()-0.5)*450, (Math.random()-0.5)*350, (Math.random()-0.5)*3);
-    
-        s.motion.length = 0;
-      }
-    
-      window.addEventListener("pointerup", release, {passive:true});
-      window.addEventListener("pointercancel", release, {passive:true});
-    
-      wrap.addEventListener("click", (e)=>{
-        if (!overlay.classList.contains("hidden")) return;
-        if (s.dragging) return;
-        e.stopPropagation();
-        boop(true);
-        const c = center();
-        addPopText(c.x, c.y - 10, "💜💙 TE AMOOOOOO 💙💜");
-        const ang = rand(-Math.PI, Math.PI);
-        applyThrow(Math.cos(ang)*900, Math.sin(ang)*750, rand(-4,4));
-      });
-    
-      return {s, tick, clampInside, center, boop};
-    }
-    
-    // Crear motores de fotos
-    const photoMotorA = makeSpriteMotor(sprPhotoA);
-    const photoMotorB = makeSpriteMotor(sprPhotoB);
-    
-    // Posiciones iniciales bonitas
+  // Crear motores de fotos (con guardas)
+  const photoMotorA = makeSpriteMotor(sprPhotoA);
+  const photoMotorB = makeSpriteMotor(sprPhotoB);
+
+  if (photoMotorA){
     photoMotorA.s.x = Math.round(W * 0.62);
     photoMotorA.s.y = Math.round(H * 0.52);
+  }
+  if (photoMotorB){
     photoMotorB.s.x = Math.round(W * 0.62);
     photoMotorB.s.y = Math.round(H * 0.18);
-    
-    // colisiones entre 3 (chibi + 2 fotos)
-    function collide3(){
-      const list = [
-        {type:"chibi", wrap: chibiWrap, obj: chibi},
-        {type:"a", wrap: sprPhotoA, obj: photoMotorA.s},
-        {type:"b", wrap: sprPhotoB, obj: photoMotorB.s},
-      ].filter(it => it.wrap && it.wrap.style.display !== "none");
-    
-      function circle(it){
-        const r = rectOf(it.wrap);
-        return {
-          cx: r.left + r.width/2,
-          cy: r.top  + r.height/2,
-          rad: Math.min(r.width,r.height)*0.36,
-          r
-        };
-      }
-    
-      for (let i=0;i<list.length;i++){
-        for (let j=i+1;j<list.length;j++){
-          const A = list[i], B = list[j];
-          const a = circle(A), b = circle(B);
-    
-          const dx = b.cx - a.cx;
-          const dy = b.cy - a.cy;
-          const dist = Math.hypot(dx,dy);
-          const minD = a.rad + b.rad;
-          if (dist <= 0 || dist > minD) continue;
-    
-          const nx = dx / dist;
-          const ny = dy / dist;
-          const overlap = (minD - dist) + 1.5;
-    
-          // separar
-          if (A.type === "chibi"){ chibi.x -= nx*overlap*0.5; chibi.y -= ny*overlap*0.5; }
-          else { A.obj.x -= nx*overlap*0.5; A.obj.y -= ny*overlap*0.5; }
-    
-          if (B.type === "chibi"){ chibi.x += nx*overlap*0.5; chibi.y += ny*overlap*0.5; }
-          else { B.obj.x += nx*overlap*0.5; B.obj.y += ny*overlap*0.5; }
-    
-          // impulso “salgan volando”
-          const power = 720;
-    
-          if (A.type === "chibi"){ chibi.vx -= nx*power; chibi.vy -= ny*power; }
-          else { A.obj.vx -= nx*power; A.obj.vy -= ny*power; }
-    
-          if (B.type === "chibi"){ chibi.vx += nx*power; chibi.vy += ny*power; }
-          else { B.obj.vx += nx*power; B.obj.vy += ny*power; }
-    
-          // FX choque
-          const cx = (a.cx + b.cx)/2;
-          const cy = (a.cy + b.cy)/2;
-          spawnComet(cx,cy, nx*900, ny*900);
-          addSparkles(cx,cy, 26);
-          addHeart(cx,cy, 4);
-          haptic(24);
-    
-          // boop de ambos
-          if (A.type === "chibi") chibiBoop(false); else photoMotorA.boop(false);
-          if (B.type === "chibi") chibiBoop(false); else photoMotorB.boop(false);
-        }
-      }
-    }
-    
-    // tick fotos en loop general
-    function photosTick(now){
-      if (sprPhotoA.style.display !== "none") photoMotorA.tick(now);
-      if (sprPhotoB.style.display !== "none") photoMotorB.tick(now);
-      collide3();
-      requestAnimationFrame(photosTick);
-    }
-    requestAnimationFrame(photosTick);
+  }
 
+  // colisiones entre 3 (chibi + 2 fotos)
+  function collide3(){
+    const items = [
+      {key:"chibi", wrap: chibiWrap, obj: chibi, boop: ()=>chibiBoop(false)},
+      {key:"a", wrap: sprPhotoA, obj: photoMotorA?.s, boop: ()=>photoMotorA?.boop(false)},
+      {key:"b", wrap: sprPhotoB, obj: photoMotorB?.s, boop: ()=>photoMotorB?.boop(false)},
+    ].filter(it => it.wrap && it.wrap.style.display !== "none" && it.obj);
 
-    
-    // =========================
-    // COUNTDOWN A AÑO NUEVO (Bogotá / Magangué)
-    // =========================
-    function pad2(n){ return String(n).padStart(2, "0"); }
-
-    function bogotaPartsNow(){
-      const fmt = new Intl.DateTimeFormat("es-CO", {
-        timeZone: "America/Bogota",
-        year: "numeric", month: "2-digit", day: "2-digit",
-        hour: "2-digit", minute: "2-digit", second: "2-digit",
-        hour12: false
-      });
-      const parts = fmt.formatToParts(new Date());
-      const get = (t)=> parts.find(p=>p.type===t)?.value;
+    function circle(it){
+      const r = rectOf(it.wrap);
       return {
-        y: +get("year"),
-        m: +get("month"),
-        d: +get("day"),
-        hh: +get("hour"),
-        mm: +get("minute"),
-        ss: +get("second")
+        cx: r.left + r.width/2,
+        cy: r.top  + r.height/2,
+        rad: Math.min(r.width,r.height)*0.36
       };
     }
 
-    // America/Bogota = UTC-5 => 00:00 Bogotá corresponde a 05:00 UTC
-    function targetBogotaMidnightUTC(){
-      return Date.now() + 5000; // 5 segundos desde ahora
-    }
+    for (let i=0;i<items.length;i++){
+      for (let j=i+1;j<items.length;j++){
+        const A = items[i], B = items[j];
+        const a = circle(A), b = circle(B);
 
-    let NY_TARGET_UTC = 0;
-    function updateCountdown(){
-      if (!NY_TARGET_UTC) NY_TARGET_UTC = targetBogotaMidnightUTC();
+        const dx = b.cx - a.cx;
+        const dy = b.cy - a.cy;
+        const dist = Math.hypot(dx,dy);
+        const minD = a.rad + b.rad;
+        if (dist <= 0 || dist > minD) continue;
 
-      const now = Date.now();
-      if (now > NY_TARGET_UTC + 1100){
-        NY_TARGET_UTC = targetBogotaMidnightUTC();
+        const nx = dx / dist;
+        const ny = dy / dist;
+        const overlap = (minD - dist) + 1.5;
+
+        // separar
+        A.obj.x -= nx*overlap*0.5; A.obj.y -= ny*overlap*0.5;
+        B.obj.x += nx*overlap*0.5; B.obj.y += ny*overlap*0.5;
+
+        // impulso
+        const power = 720;
+        A.obj.vx -= nx*power; A.obj.vy -= ny*power;
+        B.obj.vx += nx*power; B.obj.vy += ny*power;
+
+        // FX choque
+        const cx = (a.cx + b.cx)/2;
+        const cy = (a.cy + b.cy)/2;
+        spawnComet(cx,cy, nx*900, ny*900);
+        addSparkles(cx,cy, 26);
+        addHeart(cx,cy, 4);
+        haptic(24);
+
+        // boop correcto
+        A.boop?.();
+        B.boop?.();
       }
+    }
+  }
 
-      let diff = Math.max(0, NY_TARGET_UTC - now);
-      const totalSec = Math.floor(diff / 1000);
+  function photosTick(now){
+    if (sprPhotoA && sprPhotoA.style.display !== "none") photoMotorA?.tick(now);
+    if (sprPhotoB && sprPhotoB.style.display !== "none") photoMotorB?.tick(now);
+    collide3();
+    requestAnimationFrame(photosTick);
+  }
+  requestAnimationFrame(photosTick);
 
-      const hh = Math.floor(totalSec / 3600);
-      const mm = Math.floor((totalSec % 3600) / 60);
-      const ss = totalSec % 60;
+  // =========================
+  // COUNTDOWN A AÑO NUEVO (Bogotá / Magangué)
+  // ✅ ARREGLADO: ahora sí cierra llaves y no rompe el JS
+  // =========================
+  function pad2(n){ return String(n).padStart(2, "0"); }
 
-      countdownTime.textContent = `${pad2(hh)}:${pad2(mm)}:${pad2(ss)}`;
+  // Bogotá no tiene DST -> UTC-5 fijo
+  const BOGOTA_OFFSET_MS = 5 * 60 * 60 * 1000;
 
-      if (totalSec <= 0){
-        countdownSub.textContent = "¡FELIZ AÑO NUEVO AMORR VERDADERO DE MI VIDA ENTERITAAAAAA!";
-      
-        if (!updateCountdown._boom){
-          updateCountdown._boom = true;
-      
-          // Banner fijo arriba
-          document.getElementById("nyBanner")?.classList.add("show");
-      
-          showToast("🎆 FELIZ AÑO NUEVOOOOO 💜💙");
-          haptic(30);
-      
-          // Mostrar fotos (para siempre)
-          sprPhotoA.style.display = "block";
-          sprPhotoB.style.display = "block";
-      
-          // Ajuste dentro del viewport
-          photoMotorA.clampInside();
-          photoMotorB.clampInside();
-      
-          // Entrada con lanzamiento (WOW)
+  function targetNextBogotaMidnightUTC(){
+    // Convertimos "ahora" a hora Bogotá restando 5h
+    const bogNow = new Date(Date.now() - BOGOTA_OFFSET_MS);
+
+    // Próxima medianoche en Bogotá
+    const next = new Date(bogNow);
+    next.setHours(24, 0, 0, 0); // mañana 00:00:00 Bogotá
+
+    // Volvemos a UTC sumando 5h
+    return next.getTime() + BOGOTA_OFFSET_MS;
+  }
+
+  let NY_TARGET_UTC = 0;
+
+  function updateCountdown(){
+    if (!NY_TARGET_UTC) NY_TARGET_UTC = targetNextBogotaMidnightUTC();
+
+    const now = Date.now();
+    let diff = Math.max(0, NY_TARGET_UTC - now);
+    const totalSec = Math.floor(diff / 1000);
+
+    const hh = Math.floor(totalSec / 3600);
+    const mm = Math.floor((totalSec % 3600) / 60);
+    const ss = totalSec % 60;
+
+    countdownTime.textContent = `${pad2(hh)}:${pad2(mm)}:${pad2(ss)}`;
+
+    if (totalSec <= 0){
+      countdownSub.textContent = "¡FELIZ AÑO NUEVO AMORR VERDADERO DE MI VIDA ENTERITAAAAAA!";
+
+      if (!updateCountdown._boom){
+        updateCountdown._boom = true;
+
+        document.getElementById("nyBanner")?.classList.add("show");
+        showToast("🎆 FELIZ AÑO NUEVOOOOO 💜💙");
+        haptic(30);
+
+        // Mostrar fotos (para siempre)
+        if (sprPhotoA) sprPhotoA.style.display = "block";
+        if (sprPhotoB) sprPhotoB.style.display = "block";
+
+        photoMotorA?.clampInside();
+        photoMotorB?.clampInside();
+
+        // entrada con lanzamiento
+        if (photoMotorA){
           photoMotorA.s.vx = 1200; photoMotorA.s.vy = 600;  photoMotorA.s.omega = 6;
-          photoMotorB.s.vx = -1100;photoMotorB.s.vy = 720;  photoMotorB.s.omega = -6;
-      
-          // Show de 7 segundos (no se va rápido)
-          const t0 = performance.now();
-          const duration = 7000;
-      
-          const party = ()=>{
-            const t = performance.now() - t0;
-            const cx = W*0.5, cy = H*0.38;
-      
-            for(let i=0;i<4;i++){
-              addSparkles(cx + rand(-180,180), cy + rand(-120,120), 18);
-              addHeart(cx + rand(-200,200), cy + rand(-130,130), 3);
-              if (Math.random() < 0.55){
-                addPopText(cx + rand(-220,220), cy + rand(-150,150), "🎆 FELIZ AÑO NUEVOOOO 💜💙");
-              }
-              if (Math.random() < 0.45){
-                spawnComet(cx + rand(-120,120), cy + rand(-80,80), rand(-900,900), rand(-700,700));
-              }
-            }
-      
-            if (t < duration) requestAnimationFrame(party);
-            else showToast("💜💙 TE AMOOOOOO 💜💙");
-          };
-          party();
         }
+        if (photoMotorB){
+          photoMotorB.s.vx = -1100;photoMotorB.s.vy = 720;  photoMotorB.s.omega = -6;
+        }
+
+        // show 7s
+        const t0 = performance.now();
+        const duration = 7000;
+
+        const party = ()=>{
+          const t = performance.now() - t0;
+          const cx = W*0.5, cy = H*0.38;
+
+          for(let i=0;i<4;i++){
+            addSparkles(cx + rand(-180,180), cy + rand(-120,120), 18);
+            addHeart(cx + rand(-200,200), cy + rand(-130,130), 3);
+            if (Math.random() < 0.55){
+              addPopText(cx + rand(-220,220), cy + rand(-150,150), "🎆 FELIZ AÑO NUEVOOOO 💜💙");
+            }
+            if (Math.random() < 0.45){
+              spawnComet(cx + rand(-120,120), cy + rand(-80,80), rand(-900,900), rand(-700,700));
+            }
+          }
+
+          if (t < duration) requestAnimationFrame(party);
+          else showToast("💜💙 TE AMOOOOOO 💜💙");
+        };
+        party();
       }
+    } else {
+      // cuando no está en 0, resetea boom por si recargas antes de medianoche
+      updateCountdown._boom = false;
+    }
+  }
 
+  // ===== Anim loop =====
+  let last = performance.now();
+  function loop(now){
+    const dt = Math.min(40, now-last);
+    last = now;
 
-    // ===== Anim loop =====
-    let last = performance.now();
-    function loop(now){
-      const dt = Math.min(40, now-last);
-      last = now;
+    drawStars(now);
+    drawFX(dt);
 
-      drawStars(now);
-      drawFX(dt);
-
-      if (overlay.classList.contains("hidden") && Math.random() < 0.015){
-        addHeart(rand(0,W), rand(H*0.55, H*0.95), 1);
-      }
-
-      updateCountdown();
-      requestAnimationFrame(loop);
+    if (overlay.classList.contains("hidden") && Math.random() < 0.015){
+      addHeart(rand(0,W), rand(H*0.55, H*0.95), 1);
     }
 
-    // ===== Init =====
-    resize();
-    makeStars(Math.floor((window.innerWidth*window.innerHeight)/6500) + 130);
-    applyNickname();
-    applyMode(0);
-
-    // init chibi
-    setChibiXYRaw(chibi.x, chibi.y);
-    requestAnimationFrame(chibiTick);
-
+    updateCountdown();
     requestAnimationFrame(loop);
-        // =========================
-    // FADE AUTO EN SCROLL (CENTER CARD)
-    // =========================
-    const centerCard = document.getElementById("card");
-    
-    function updateCenterCardFade(){
-      if (!centerCard) return;
-    
-      const { scrollTop, scrollHeight, clientHeight } = centerCard;
-    
-      // ¿Hay scroll?
-      const hasScroll = scrollHeight > clientHeight + 2;
-    
-      // Arriba
-      if (hasScroll && scrollTop > 4){
-        centerCard.classList.add("fade-top");
-      } else {
-        centerCard.classList.remove("fade-top");
-      }
-    
-      // Abajo
-      if (hasScroll && scrollTop + clientHeight < scrollHeight - 4){
-        centerCard.classList.add("fade-bottom");
-      } else {
-        centerCard.classList.remove("fade-bottom");
-      }
-    }
-    
-    // Eventos
-    centerCard.addEventListener("scroll", updateCenterCardFade, {passive:true});
-    window.addEventListener("resize", updateCenterCardFade, {passive:true});
-    window.addEventListener("orientationchange", updateCenterCardFade, {passive:true});
-    
-    // Inicial
-    setTimeout(updateCenterCardFade, 80);
-  </script>
+  }
+
+  // =========================
+  // FADE AUTO EN SCROLL (CENTER CARD)
+  // =========================
+  const centerCard = document.getElementById("card");
+
+  function updateCenterCardFade(){
+    if (!centerCard) return;
+    const { scrollTop, scrollHeight, clientHeight } = centerCard;
+    const hasScroll = scrollHeight > clientHeight + 2;
+
+    if (hasScroll && scrollTop > 4) centerCard.classList.add("fade-top");
+    else centerCard.classList.remove("fade-top");
+
+    if (hasScroll && scrollTop + clientHeight < scrollHeight - 4) centerCard.classList.add("fade-bottom");
+    else centerCard.classList.remove("fade-bottom");
+  }
+
+  centerCard.addEventListener("scroll", updateCenterCardFade, {passive:true});
+  window.addEventListener("resize", updateCenterCardFade, {passive:true});
+  window.addEventListener("orientationchange", updateCenterCardFade, {passive:true});
+
+  // ===== Init =====
+  resize();
+  makeStars(Math.floor((window.innerWidth*window.innerHeight)/6500) + 130);
+  applyNickname();
+  applyMode(0);
+
+  setChibiXYRaw(chibi.x, chibi.y);
+  requestAnimationFrame(chibiTick);
+  requestAnimationFrame(loop);
+
+  setTimeout(updateCenterCardFade, 80);
+</script>
 </body>
 </html>
+
 
 
 
