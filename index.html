@@ -1753,8 +1753,7 @@
 
     // America/Bogota = UTC-5 => 00:00 Bogotá corresponde a 05:00 UTC
     function targetBogotaMidnightUTC(){
-      const p = bogotaPartsNow();
-      return Date.UTC(p.y, p.m - 1, p.d + 1, 5, 0, 0);
+      return Date.now() + 5000; // 5 segundos desde ahora
     }
 
     let NY_TARGET_UTC = 0;
@@ -1857,6 +1856,7 @@
   </script>
 </body>
 </html>
+
 
 
 
