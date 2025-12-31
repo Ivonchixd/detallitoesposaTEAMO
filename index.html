@@ -368,6 +368,41 @@
       *{transition:none !important; animation:none !important}
       .chibiWrap{animation:none !important}
     }
+
+    /* ===== FIX ANDROID: altura real + evitar cortes ===== */
+    :root{
+      --vh: 1vh; /* fallback JS */
+    }
+    
+    body{
+      /* 100dvh soporta address bar dinámica; fallback con --vh */
+      min-height: 100vh;
+      min-height: 100dvh;
+      height: calc(var(--vh) * 100);
+    }
+    
+    /* La UI ocupa el alto real */
+    .ui{
+      height: calc(var(--vh) * 100);
+    }
+    
+    /* Evita que la tarjeta central se corte */
+    .centerCard{
+      margin-top: clamp(10px, 6vh, 11vh);   /* baja en móviles */
+      max-height: calc((var(--vh) * 100) - 230px); /* deja espacio topbar+bottombar */
+      overflow: auto;                        /* scroll si no cabe */
+      -webkit-overflow-scrolling: touch;     /* scroll suave Android/iOS */
+    }
+    
+    /* En pantallas pequeñas, aún más compacto */
+    @media (max-height: 700px){
+      .centerCard{
+        margin-top: 10px;
+        max-height: calc((var(--vh) * 100) - 210px);
+      }
+      .hint{ gap:8px; }
+      .chip{ padding:7px 9px; font-size:11px; }
+    } 
   </style>
 </head>
 
@@ -454,6 +489,15 @@
   </div>
 
   <script>
+        // ===== Fix VH Android (address bar) =====
+    function setVH(){
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    }
+    setVH();
+    window.addEventListener('resize', setVH, {passive:true});
+    window.addEventListener('orientationchange', setVH, {passive:true});
+
     /**********************
      *  Romantic Galaxy ✨ (INTENSO EDITION)
      **********************/
@@ -1560,4 +1604,5 @@
   </script>
 </body>
 </html>
+
 
