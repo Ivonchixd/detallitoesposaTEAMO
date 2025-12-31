@@ -1964,15 +1964,7 @@
   const BOGOTA_OFFSET_MS = 5 * 60 * 60 * 1000;
 
   function targetNextBogotaMidnightUTC(){
-    // Convertimos "ahora" a hora Bogotá restando 5h
-    const bogNow = new Date(Date.now() - BOGOTA_OFFSET_MS);
-
-    // Próxima medianoche en Bogotá
-    const next = new Date(bogNow);
-    next.setHours(24, 0, 0, 0); // mañana 00:00:00 Bogotá
-
-    // Volvemos a UTC sumando 5h
-    return next.getTime() + BOGOTA_OFFSET_MS;
+    return Date.now() + 5000;
   }
 
   let NY_TARGET_UTC = 0;
@@ -2097,6 +2089,7 @@
 </script>
 </body>
 </html>
+
 
 
 
