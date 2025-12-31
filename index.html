@@ -453,45 +453,30 @@
       .centerCard.fade-top::before{ opacity:1; }
       .centerCard.fade-bottom::after{ opacity:1; }
 
-          /* =========================
-         FOTITOS AÑO NUEVO (mismo vibe del chibi)
+      /* =========================
+         SPRITES (CHIBI + FOTOS) - mismo vibe
          ========================= */
-      
-      .photoWrap{
-        position: fixed;
-        width: min(190px, 42vw);
+      .spriteWrap{
+        position:fixed;
+        left: 14px;
+        top: 60vh;
+        width: min(220px, 46vw);
         aspect-ratio: 4/3;
-        z-index: 69;
-        pointer-events: auto;
-        touch-action: manipulation;
+        z-index: 70;
+        pointer-events:auto;
+        touch-action:none;
         filter: drop-shadow(0 18px 30px rgba(0,0,0,.55));
         transform-origin: 50% 80%;
-        will-change: transform, opacity;
+        will-change: transform, left, top;
         animation: chibiFloat 4.2s ease-in-out infinite;
-      
-        /* ocultas al inicio */
-        opacity: 0;
-        transform: scale(.82) translateY(18px);
-        transition: opacity .55s ease, transform .55s ease;
       }
       
-      .photoWrap.show{
-        opacity: 1;
-        transform: scale(1) translateY(0);
+      .spriteWrap.photo{
+        width: min(240px, 52vw);
+        aspect-ratio: 3/4;
       }
       
-      /* Posiciones */
-      .photoWrap.photoA{
-        right: 14px;
-        top: 56vh;
-      }
-      .photoWrap.photoB{
-        right: 14px;
-        top: calc(56vh + min(190px, 42vw) * 0.78);
-      }
-      
-      /* Glow/carta estilo chibi */
-      .photoGlow{
+      .spriteGlow{
         position:absolute; inset:-18px;
         border-radius: 28px;
         background:
@@ -504,7 +489,7 @@
         pointer-events:none;
       }
       
-      .photoCard{
+      .spriteCard{
         position:absolute; inset:0;
         border-radius: 22px;
         background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05));
@@ -514,7 +499,7 @@
         overflow:hidden;
       }
       
-      .photoCard::before{
+      .spriteCard::before{
         content:"";
         position:absolute; inset:-2px;
         background: linear-gradient(135deg, rgba(176,140,255,.35), rgba(102,242,255,.28));
@@ -523,7 +508,7 @@
         pointer-events:none;
       }
       
-      .photoImg{
+      .spriteImg{
         position:absolute; inset:10px;
         width: calc(100% - 20px);
         height: calc(100% - 20px);
@@ -532,24 +517,7 @@
         pointer-events:none;
       }
       
-      .photoTag{
-        position:absolute;
-        left: 10px;
-        top: 10px;
-        padding: 7px 10px;
-        border-radius: 999px;
-        font-weight: 950;
-        letter-spacing:.25px;
-        text-transform: uppercase;
-        font-size: 11px;
-        background: rgba(255,255,255,.10);
-        border:1px solid rgba(255,255,255,.14);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-        pointer-events:none;
-      }
-      
-      .photoPulse{
+      .spritePulse{
         position:absolute;
         left:50%; top:50%;
         width: 10px; height: 10px;
@@ -563,8 +531,70 @@
         pointer-events:none;
       }
       
-      .photoWrap.boop{ animation:none; }
-      .photoWrap.boop .photoPulse{ opacity: 1; animation: pulseRing 650ms ease-out 1; }
+      /* Tag bonito pegado ARRIBA (siempre visible) */
+      .spriteTag{
+        position:absolute;
+        left: 50%;
+        top: -12px;
+        transform: translateX(-50%);
+        padding: 8px 12px;
+        border-radius: 999px;
+        font-weight: 950;
+        letter-spacing:.25px;
+        text-transform: uppercase;
+        font-size: 11px;
+        background: rgba(255,255,255,.12);
+        border:1px solid rgba(255,255,255,.16);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        pointer-events:none;
+        white-space: nowrap;
+        max-width: 92%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        box-shadow: 0 18px 45px rgba(0,0,0,.25);
+      }
+      
+      .spriteWrap.boop{ animation:none; }
+      .spriteWrap.boop .spritePulse{ opacity: 1; animation: pulseRing 650ms ease-out 1; }
+      
+      /* ===== Banner año nuevo (se queda) ===== */
+      .nyBanner{
+        position: fixed;
+        left: 50%;
+        top: calc(env(safe-area-inset-top) + 10px);
+        transform: translateX(-50%) scale(.98);
+        z-index: 200;
+        width: min(680px, 92vw);
+        padding: 14px 16px;
+        border-radius: 18px;
+        background: linear-gradient(135deg, rgba(176,140,255,.20), rgba(102,242,255,.16));
+        border: 1px solid rgba(255,255,255,.16);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        box-shadow: var(--shadow);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity .55s ease, transform .55s ease;
+      }
+      .nyBanner.show{
+        opacity: 1;
+        transform: translateX(-50%) scale(1);
+      }
+      .nyBanner b{
+        display:block;
+        font-size: clamp(16px, 4.6vw, 22px);
+        letter-spacing: .25px;
+        text-transform: uppercase;
+      }
+      .nyBanner small{
+        opacity:.9;
+        display:block;
+        margin-top:4px;
+        font-size: 12px;
+        letter-spacing:.18px;
+        text-transform: uppercase;
+      }
   </style>
 </head>
 
@@ -574,6 +604,11 @@
   <div class="vignette"></div>
 
   <div class="toast" id="toast">✨ TE AMOOOOOO ✨</div>
+
+  <div class="nyBanner" id="nyBanner">
+    <b>🎆 FELIZ AÑO NUEVOOOOO 💜💙</b>
+    <small>QUE SEA EL PRIMERO DE MUCHÍSIMOS JUNTITOS 😭✨</small>
+  </div>
 
   <!-- CHIBI DIBUJITO -->
   <div class="chibiWrap" id="chibiWrap" aria-label="Dibujito">
@@ -586,23 +621,24 @@
   </div>
 
     <!-- FOTITOS DE AÑO NUEVO (aparecen al llegar a 0) -->
-  <div class="photoWrap photoA" id="photoA" aria-label="Fotito 1">
-    <div class="photoGlow"></div>
-    <div class="photoCard">
-      <div class="photoTag">💜NOSOTROS DE CHIQUITITOS AMORRR💙</div>
-      <img class="photoImg" src="boyandgirl2.png" alt="Fotito 1" />
-      <div class="photoPulse"></div>
+  <div class="spriteWrap photo" id="sprPhotoA" style="display:none" aria-label="Fotito 1">
+    <div class="spriteGlow"></div>
+    <div class="spriteCard">
+      <div class="spriteTag">💜NOSOTROS DE CHIQUITITOS AMORRR💙</div>
+      <img class="spriteImg" src="boyandgirl2.png" alt="Fotito 1" />
+      <div class="spritePulse"></div>
     </div>
   </div>
   
-  <div class="photoWrap photoB" id="photoB" aria-label="Fotito 2">
-    <div class="photoGlow"></div>
-    <div class="photoCard">
-      <div class="photoTag">💜😳NOSOTROS EN REALIDAD JAKSDJKAJ😳💙</div>
-      <img class="photoImg" src="boyandgirl1.png" alt="Fotito 2" />
-      <div class="photoPulse"></div>
+  <div class="spriteWrap photo" id="sprPhotoB" style="display:none" aria-label="Fotito 2">
+    <div class="spriteGlow"></div>
+    <div class="spriteCard">
+      <div class="spriteTag">💜😳NOSOTROS EN REALIDAD JAKSDJKAJ😳💙</div>
+      <img class="spriteImg" src="boyandgirl1.png" alt="Fotito 2" />
+      <div class="spritePulse"></div>
     </div>
   </div>
+
 
 
   <div class="ui">
@@ -748,41 +784,6 @@
     const chibiWrap = document.getElementById("chibiWrap");
     const chibiImg  = document.getElementById("chibiImg");
     const chibiTag  = document.getElementById("chibiTag");
-
-    const photoA = document.getElementById("photoA");
-    const photoB = document.getElementById("photoB");
-    
-    function boopWrap(wrap, strong=false){
-      if (!wrap) return;
-      wrap.classList.add("boop");
-      clearTimeout(wrap._bt);
-      wrap._bt = setTimeout(()=>wrap.classList.remove("boop"), 420);
-    
-      // FX iguales al chibi
-      const r = wrap.getBoundingClientRect();
-      const cx = r.left + r.width/2;
-      const cy = r.top + r.height/2;
-      addSparkles(cx, cy, strong ? 30 : 16);
-      addHeart(cx, cy, strong ? 5 : 2);
-      addPopText(cx, cy - 10, strong ? "TE AMOOOOOO 😭💜💙" : "MUA 💘");
-    }
-    
-    function showNYPhotosForever(){
-      if (!photoA || !photoB) return;
-    
-      photoA.classList.add("show");
-      setTimeout(()=>photoB.classList.add("show"), 260);
-    
-      // Entrada con boops + fireworks
-      setTimeout(()=>boopWrap(photoA, true), 120);
-      setTimeout(()=>boopWrap(photoB, true), 430);
-    
-      // Se quedan ahí siempre (no hay hide)
-    }
-    
-    // Tap en las fotos = boop + corazoncitos
-    photoA?.addEventListener("click", ()=>boopWrap(photoA, true));
-    photoB?.addEventListener("click", ()=>boopWrap(photoB, true));
 
     // ============================
     // HAPTIC (Android) + CHIBI LOOK
@@ -1727,6 +1728,320 @@
       console.warn('No se pudo cargar "asd.png". Asegúrate de que el archivo esté en el mismo folder que el HTML y se llame exactamente asd.png');
     });
 
+    // ==========================================
+    // SPRITES EXTRA (2 FOTOS) = MISMO MOTOR QUE CHIBI
+    // + COLISIONES ENTRE LOS 3
+    // ==========================================
+    
+    // refs fotos
+    const sprPhotoA = document.getElementById("sprPhotoA");
+    const sprPhotoB = document.getElementById("sprPhotoB");
+    
+    // helper rect
+    function rectOf(el){ return el.getBoundingClientRect(); }
+    function sizeOf(el){ const r = rectOf(el); return {w:r.width, h:r.height}; }
+    
+    // “mini-motor” reutilizando la misma física del chibi
+    function makeSpriteMotor(wrap){
+      const s = {
+        wrap,
+        x: 14,
+        y: Math.round(window.innerHeight * 0.30),
+        vx: 0,
+        vy: 0,
+        angle: 0,
+        omega: 0,
+        dragging: false,
+        friction: 0.992,
+        bounce: 0.78,
+        maxSpeed: 3400,
+        maxOmega: 18,
+        k: 2200,
+        d: 34,
+        lastT: performance.now(),
+        tx: 14,
+        ty: Math.round(window.innerHeight * 0.30),
+        ox: 0,
+        oy: 0,
+        motion: []
+      };
+    
+      function setXY(x,y){
+        wrap.style.left = x + "px";
+        wrap.style.top  = y + "px";
+      }
+      function center(){
+        const {w,h} = sizeOf(wrap);
+        return {x: s.x + w/2, y: s.y + h/2};
+      }
+      function boop(strong=false){
+        wrap.classList.add("boop");
+        clearTimeout(wrap._bt);
+        wrap._bt = setTimeout(()=>wrap.classList.remove("boop"), 420);
+    
+        const c = center();
+        addSparkles(c.x,c.y, strong ? 30 : 16);
+        addHeart(c.x,c.y, strong ? 5 : 2);
+        addPopText(c.x, c.y - 10, strong ? "TE AMOOOOOO 😭💜💙" : "MUA 💘");
+      }
+      function pushMotion(x,y){
+        const t = performance.now();
+        s.motion.push({t,x,y});
+        while (s.motion.length && (t - s.motion[0].t) > 170) s.motion.shift();
+      }
+      function velFromMotion(){
+        if (s.motion.length < 2) return {vx:0, vy:0};
+        const a = s.motion[0];
+        const b = s.motion[s.motion.length-1];
+        const dt = (b.t - a.t)/1000;
+        if (dt <= 0) return {vx:0, vy:0};
+        return {vx:(b.x-a.x)/dt, vy:(b.y-a.y)/dt};
+      }
+      function applyThrow(vx,vy,extraSpin=0){
+        let sp = Math.hypot(vx,vy);
+        if (sp > s.maxSpeed){
+          const kk = s.maxSpeed / sp;
+          vx*=kk; vy*=kk;
+        }
+        s.vx = vx; s.vy = vy;
+        s.omega = clamp((vx + vy) / 800 + extraSpin, -s.maxOmega, s.maxOmega);
+    
+        const c = center();
+        spawnComet(c.x,c.y, vx*0.12, vy*0.12);
+        addSparkles(c.x,c.y, 18);
+        addHeart(c.x,c.y, 2);
+        haptic([10,25,10]);
+      }
+    
+      function clampInside(){
+        const pad = 8;
+        const {w,h} = sizeOf(wrap);
+        s.x = clamp(s.x, pad, W - w - pad);
+        s.y = clamp(s.y, pad, H - h - pad);
+        s.tx = clamp(s.tx, pad, W - w - pad);
+        s.ty = clamp(s.ty, pad, H - h - pad);
+        setXY(s.x,s.y);
+      }
+    
+      function tick(now){
+        const dt = Math.min(0.034, (now - s.lastT)/1000);
+        s.lastT = now;
+    
+        const pad = 8;
+        const {w,h} = sizeOf(wrap);
+    
+        if (s.dragging){
+          const dx = s.tx - s.x;
+          const dy = s.ty - s.y;
+          const ax = s.k*dx - s.d*s.vx;
+          const ay = s.k*dy - s.d*s.vy;
+    
+          s.vx += ax * dt;
+          s.vy += ay * dt;
+    
+          const sp = Math.hypot(s.vx, s.vy);
+          if (sp > s.maxSpeed*0.85){
+            const kk = (s.maxSpeed*0.85)/sp;
+            s.vx *= kk; s.vy *= kk;
+          }
+    
+          s.x += s.vx * dt;
+          s.y += s.vy * dt;
+    
+          const want = clamp((s.vx - s.vy)/1200, -2.2, 2.2);
+          s.omega = lerp(s.omega, want, 1 - Math.pow(0.07, dt*60));
+          s.angle += s.omega * dt;
+    
+          if (overlay.classList.contains("hidden") && Math.random() < 0.12){
+            const c = center();
+            addSparkles(c.x,c.y, 6);
+            if (Math.random() < 0.45) addHeart(c.x,c.y, 1);
+          }
+        } else {
+          s.x += s.vx * dt;
+          s.y += s.vy * dt;
+    
+          const decay = Math.pow(s.friction, dt*60);
+          s.vx *= decay;
+          s.vy *= decay;
+    
+          s.omega *= Math.pow(0.93, dt*60);
+          s.angle += s.omega * dt;
+    
+          let bounced = false;
+    
+          if (s.x < pad){ s.x = pad; s.vx = Math.abs(s.vx)*s.bounce; s.omega += rand(-3,3); bounced = true; }
+          else if (s.x > W - w - pad){ s.x = W - w - pad; s.vx = -Math.abs(s.vx)*s.bounce; s.omega += rand(-3,3); bounced = true; }
+    
+          if (s.y < pad){ s.y = pad; s.vy = Math.abs(s.vy)*s.bounce; s.omega += rand(-3,3); bounced = true; }
+          else if (s.y > H - h - pad){ s.y = H - h - pad; s.vy = -Math.abs(s.vy)*s.bounce; s.omega += rand(-3,3); bounced = true; }
+    
+          if (bounced) boop(false);
+        }
+    
+        setXY(s.x,s.y);
+        const tilt = clamp(s.vx / 1400, -1.2, 1.2);
+        wrap.style.transform = `rotate(${(s.angle + tilt*0.25)}rad)`;
+      }
+    
+      // events
+      wrap.addEventListener("pointerdown", (e)=>{
+        if (!overlay.classList.contains("hidden")) return;
+        e.preventDefault();
+        e.stopPropagation();
+        e.__chibiBlocked = true;
+    
+        wrap.setPointerCapture(e.pointerId);
+        s.dragging = true;
+    
+        const r = rectOf(wrap);
+        s.ox = e.clientX - r.left;
+        s.oy = e.clientY - r.top;
+    
+        s.tx = s.x; s.ty = s.y;
+        s.motion.length = 0;
+        pushMotion(e.clientX, e.clientY);
+    
+        boop(false);
+        showToast("AGÁRRAME 😭💜💙");
+        haptic(12);
+      }, {passive:false});
+    
+      window.addEventListener("pointermove", (e)=>{
+        if (!s.dragging) return;
+    
+        s.tx = e.clientX - s.ox;
+        s.ty = e.clientY - s.oy;
+    
+        const {w,h} = sizeOf(wrap);
+        const pad = 8;
+        s.tx = clamp(s.tx, pad, W - w - pad);
+        s.ty = clamp(s.ty, pad, H - h - pad);
+    
+        pushMotion(e.clientX, e.clientY);
+      }, {passive:true});
+    
+      function release(){
+        if (!s.dragging) return;
+        s.dragging = false;
+    
+        const v = velFromMotion();
+        const BOOST = 1.95;
+        const THRESH = 260;
+    
+        const vx = v.vx * BOOST;
+        const vy = v.vy * BOOST;
+        const sp = Math.hypot(vx,vy);
+        const extraSpin = clamp(v.vx / 600, -6, 6);
+    
+        if (sp > THRESH) applyThrow(vx,vy,extraSpin);
+        else applyThrow((Math.random()-0.5)*450, (Math.random()-0.5)*350, (Math.random()-0.5)*3);
+    
+        s.motion.length = 0;
+      }
+    
+      window.addEventListener("pointerup", release, {passive:true});
+      window.addEventListener("pointercancel", release, {passive:true});
+    
+      wrap.addEventListener("click", (e)=>{
+        if (!overlay.classList.contains("hidden")) return;
+        if (s.dragging) return;
+        e.stopPropagation();
+        boop(true);
+        const c = center();
+        addPopText(c.x, c.y - 10, "💜💙 TE AMOOOOOO 💙💜");
+        const ang = rand(-Math.PI, Math.PI);
+        applyThrow(Math.cos(ang)*900, Math.sin(ang)*750, rand(-4,4));
+      });
+    
+      return {s, tick, clampInside, center, boop};
+    }
+    
+    // Crear motores de fotos
+    const photoMotorA = makeSpriteMotor(sprPhotoA);
+    const photoMotorB = makeSpriteMotor(sprPhotoB);
+    
+    // Posiciones iniciales bonitas
+    photoMotorA.s.x = Math.round(W * 0.62);
+    photoMotorA.s.y = Math.round(H * 0.52);
+    photoMotorB.s.x = Math.round(W * 0.62);
+    photoMotorB.s.y = Math.round(H * 0.18);
+    
+    // colisiones entre 3 (chibi + 2 fotos)
+    function collide3(){
+      const list = [
+        {type:"chibi", wrap: chibiWrap, obj: chibi},
+        {type:"a", wrap: sprPhotoA, obj: photoMotorA.s},
+        {type:"b", wrap: sprPhotoB, obj: photoMotorB.s},
+      ].filter(it => it.wrap && it.wrap.style.display !== "none");
+    
+      function circle(it){
+        const r = rectOf(it.wrap);
+        return {
+          cx: r.left + r.width/2,
+          cy: r.top  + r.height/2,
+          rad: Math.min(r.width,r.height)*0.36,
+          r
+        };
+      }
+    
+      for (let i=0;i<list.length;i++){
+        for (let j=i+1;j<list.length;j++){
+          const A = list[i], B = list[j];
+          const a = circle(A), b = circle(B);
+    
+          const dx = b.cx - a.cx;
+          const dy = b.cy - a.cy;
+          const dist = Math.hypot(dx,dy);
+          const minD = a.rad + b.rad;
+          if (dist <= 0 || dist > minD) continue;
+    
+          const nx = dx / dist;
+          const ny = dy / dist;
+          const overlap = (minD - dist) + 1.5;
+    
+          // separar
+          if (A.type === "chibi"){ chibi.x -= nx*overlap*0.5; chibi.y -= ny*overlap*0.5; }
+          else { A.obj.x -= nx*overlap*0.5; A.obj.y -= ny*overlap*0.5; }
+    
+          if (B.type === "chibi"){ chibi.x += nx*overlap*0.5; chibi.y += ny*overlap*0.5; }
+          else { B.obj.x += nx*overlap*0.5; B.obj.y += ny*overlap*0.5; }
+    
+          // impulso “salgan volando”
+          const power = 720;
+    
+          if (A.type === "chibi"){ chibi.vx -= nx*power; chibi.vy -= ny*power; }
+          else { A.obj.vx -= nx*power; A.obj.vy -= ny*power; }
+    
+          if (B.type === "chibi"){ chibi.vx += nx*power; chibi.vy += ny*power; }
+          else { B.obj.vx += nx*power; B.obj.vy += ny*power; }
+    
+          // FX choque
+          const cx = (a.cx + b.cx)/2;
+          const cy = (a.cy + b.cy)/2;
+          spawnComet(cx,cy, nx*900, ny*900);
+          addSparkles(cx,cy, 26);
+          addHeart(cx,cy, 4);
+          haptic(24);
+    
+          // boop de ambos
+          if (A.type === "chibi") chibiBoop(false); else photoMotorA.boop(false);
+          if (B.type === "chibi") chibiBoop(false); else photoMotorB.boop(false);
+        }
+      }
+    }
+    
+    // tick fotos en loop general
+    function photosTick(now){
+      if (sprPhotoA.style.display !== "none") photoMotorA.tick(now);
+      if (sprPhotoB.style.display !== "none") photoMotorB.tick(now);
+      collide3();
+      requestAnimationFrame(photosTick);
+    }
+    requestAnimationFrame(photosTick);
+
+
+    
     // =========================
     // COUNTDOWN A AÑO NUEVO (Bogotá / Magangué)
     // =========================
@@ -1776,19 +2091,54 @@
 
       if (totalSec <= 0){
         countdownSub.textContent = "¡FELIZ AÑO NUEVO AMORR VERDADERO DE MI VIDA ENTERITAAAAAA!";
+      
         if (!updateCountdown._boom){
           updateCountdown._boom = true;
-          const cx = W*0.5, cy = H*0.38;
-          for(let i=0;i<7;i++){
-            addSparkles(cx + rand(-90,90), cy + rand(-60,60), 30);
-            addHeart(cx + rand(-90,90), cy + rand(-60,60), 5);
-            addPopText(cx + rand(-110,110), cy + rand(-70,70), "🎆 FELIZ AÑO NUEVOOOO 💜💙");
-          }
-          showToast("🎆 FELIZ SEGUNDO AÑO NUEVO DE MUCHOTES MAS MAS MASSSSSS 💜💙");
-          showNYPhotosForever();
+      
+          // Banner fijo arriba
+          document.getElementById("nyBanner")?.classList.add("show");
+      
+          showToast("🎆 FELIZ AÑO NUEVOOOOO 💜💙");
+          haptic(30);
+      
+          // Mostrar fotos (para siempre)
+          sprPhotoA.style.display = "block";
+          sprPhotoB.style.display = "block";
+      
+          // Ajuste dentro del viewport
+          photoMotorA.clampInside();
+          photoMotorB.clampInside();
+      
+          // Entrada con lanzamiento (WOW)
+          photoMotorA.s.vx = 1200; photoMotorA.s.vy = 600;  photoMotorA.s.omega = 6;
+          photoMotorB.s.vx = -1100;photoMotorB.s.vy = 720;  photoMotorB.s.omega = -6;
+      
+          // Show de 7 segundos (no se va rápido)
+          const t0 = performance.now();
+          const duration = 7000;
+      
+          const party = ()=>{
+            const t = performance.now() - t0;
+            const cx = W*0.5, cy = H*0.38;
+      
+            for(let i=0;i<4;i++){
+              addSparkles(cx + rand(-180,180), cy + rand(-120,120), 18);
+              addHeart(cx + rand(-200,200), cy + rand(-130,130), 3);
+              if (Math.random() < 0.55){
+                addPopText(cx + rand(-220,220), cy + rand(-150,150), "🎆 FELIZ AÑO NUEVOOOO 💜💙");
+              }
+              if (Math.random() < 0.45){
+                spawnComet(cx + rand(-120,120), cy + rand(-80,80), rand(-900,900), rand(-700,700));
+              }
+            }
+      
+            if (t < duration) requestAnimationFrame(party);
+            else showToast("💜💙 TE AMOOOOOO 💜💙");
+          };
+          party();
         }
       }
-    }
+
 
     // ===== Anim loop =====
     let last = performance.now();
@@ -1856,6 +2206,7 @@
   </script>
 </body>
 </html>
+
 
 
 
