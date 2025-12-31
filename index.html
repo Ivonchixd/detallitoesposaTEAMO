@@ -1974,71 +1974,113 @@
   // COUNTDOWN A AÑO NUEVO (Bogotá / Magangué)
   // ✅ ARREGLADO: ahora sí cierra llaves y no rompe el JS
   // =========================
+  // =========================
+  // COUNTDOWN A AÑO NUEVO (Magangué / Colombia = America/Bogota)
+  // ✅ 100% basado en zona horaria real, sin offsets manuales
+  // =========================
   function pad2(n){ return String(n).padStart(2, "0"); }
-
-  // Bogotá no tiene DST -> UTC-5 fijo
-  const BOGOTA_OFFSET_MS = 5 * 60 * 60 * 1000;
-
-  function targetNextBogotaMidnightUTC(){
-    // Convertimos "ahora" a hora Bogotá restando 5h
-    const bogNow = new Date(Date.now() - BOGOTA_OFFSET_MS);
-
-    // Próxima medianoche en Bogotá
-    const next = new Date(bogNow);
-    next.setHours(24, 0, 0, 0); // mañana 00:00:00 Bogotá
-
-    // Volvemos a UTC sumando 5h
-    return next.getTime() + BOGOTA_OFFSET_MS;
+  
+  const TZ = "America/Bogota";
+  
+  // Convierte "YYYY-MM-DD HH:mm:ss" EN ESA TZ a timestamp UTC
+  function tzDateTimeToUTCms(y, m, d, hh, mm, ss, tz){
+    // Creamos una fecha "como si fuera UTC"
+    const asUTC = Date.UTC(y, m-1, d, hh, mm, ss);
+  
+    // Averiguamos qué hora es ese instante en la TZ
+    const parts = new Intl.DateTimeFormat("en-US", {
+      timeZone: tz,
+      year: "numeric", month: "2-digit", day: "2-digit",
+      hour: "2-digit", minute: "2-digit", second: "2-digit",
+      hour12: false
+    }).formatToParts(new Date(asUTC));
+  
+    const get = (t)=> +parts.find(p=>p.type===t).value;
+  
+    // El offset real de esa TZ en ese instante:
+    const tzAsUTC = Date.UTC(get("year"), get("month")-1, get("day"), get("hour"), get("minute"), get("second"));
+    const offset = tzAsUTC - asUTC;
+  
+    // Para representar "y-m-d hh:mm:ss en tz" en UTC:
+    return asUTC - offset;
   }
-
+  
+  function getBogotaNowParts(){
+    const parts = new Intl.DateTimeFormat("en-US", {
+      timeZone: TZ,
+      year:"numeric", month:"2-digit", day:"2-digit",
+      hour:"2-digit", minute:"2-digit", second:"2-digit",
+      hour12:false
+    }).formatToParts(new Date());
+  
+    const get = (t)=> +parts.find(p=>p.type===t).value;
+    return {
+      y: get("year"),
+      m: get("month"),
+      d: get("day"),
+      hh: get("hour"),
+      mm: get("minute"),
+      ss: get("second")
+    };
+  }
+  
+  function targetNextMidnightBogotaUTC(){
+    const now = getBogotaNowParts();
+  
+    // "mañana" en Bogotá (simple: construimos 00:00 y dejamos que Date lo normalice)
+    // Para evitar líos con fin de mes, usamos un Date UTC temporal solo para sumar 1 día:
+    const temp = new Date(Date.UTC(now.y, now.m-1, now.d, 12, 0, 0)); // 12:00 para evitar bordes
+    temp.setUTCDate(temp.getUTCDate() + 1);
+  
+    const y = temp.getUTCFullYear();
+    const m = temp.getUTCMonth() + 1;
+    const d = temp.getUTCDate();
+  
+    // Medianoche (00:00:00) en Bogotá => timestamp UTC
+    return tzDateTimeToUTCms(y, m, d, 0, 0, 0, TZ);
+  }
+  
   let NY_TARGET_UTC = 0;
-
+  
   function updateCountdown(){
-    if (!NY_TARGET_UTC) NY_TARGET_UTC = targetNextBogotaMidnightUTC();
-
+    if (!NY_TARGET_UTC) NY_TARGET_UTC = targetNextMidnightBogotaUTC();
+  
     const now = Date.now();
     let diff = Math.max(0, NY_TARGET_UTC - now);
     const totalSec = Math.floor(diff / 1000);
-
+  
     const hh = Math.floor(totalSec / 3600);
     const mm = Math.floor((totalSec % 3600) / 60);
     const ss = totalSec % 60;
-
+  
     countdownTime.textContent = `${pad2(hh)}:${pad2(mm)}:${pad2(ss)}`;
-
+  
     if (totalSec <= 0){
       countdownSub.textContent = "¡FELIZ AÑO NUEVO AMORR VERDADERO DE MI VIDA ENTERITAAAAAA!";
-
+  
       if (!updateCountdown._boom){
         updateCountdown._boom = true;
-
+  
         document.getElementById("nyBanner")?.classList.add("show");
         showToast("🎆 FELIZ AÑO NUEVOOOOO 💜💙");
         haptic(30);
-
-        // Mostrar fotos (para siempre)
+  
         if (sprPhotoA) sprPhotoA.style.display = "block";
         if (sprPhotoB) sprPhotoB.style.display = "block";
-
+  
         photoMotorA?.clampInside();
         photoMotorB?.clampInside();
-
-        // entrada con lanzamiento
-        if (photoMotorA){
-          photoMotorA.s.vx = 1200; photoMotorA.s.vy = 600;  photoMotorA.s.omega = 6;
-        }
-        if (photoMotorB){
-          photoMotorB.s.vx = -1100;photoMotorB.s.vy = 720;  photoMotorB.s.omega = -6;
-        }
-
-        // show 7s
+  
+        if (photoMotorA){ photoMotorA.s.vx = 1200; photoMotorA.s.vy = 600;  photoMotorA.s.omega = 6; }
+        if (photoMotorB){ photoMotorB.s.vx = -1100; photoMotorB.s.vy = 720;  photoMotorB.s.omega = -6; }
+  
         const t0 = performance.now();
         const duration = 7000;
-
+  
         const party = ()=>{
           const t = performance.now() - t0;
           const cx = W*0.5, cy = H*0.38;
-
+  
           for(let i=0;i<4;i++){
             addSparkles(cx + rand(-180,180), cy + rand(-120,120), 18);
             addHeart(cx + rand(-200,200), cy + rand(-130,130), 3);
@@ -2049,14 +2091,13 @@
               spawnComet(cx + rand(-120,120), cy + rand(-80,80), rand(-900,900), rand(-700,700));
             }
           }
-
+  
           if (t < duration) requestAnimationFrame(party);
           else showToast("💜💙 TE AMOOOOOO 💜💙");
         };
         party();
       }
     } else {
-      // cuando no está en 0, resetea boom por si recargas antes de medianoche
       updateCountdown._boom = false;
     }
   }
@@ -2113,6 +2154,7 @@
 </script>
 </body>
 </html>
+
 
 
 
