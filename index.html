@@ -619,7 +619,7 @@
 
   <div class="nyBanner" id="nyBanner">
     <b>🎆 FELIZ AÑO NUEVOOOOO 💜💙</b>
-    <small>QUE SEA EL PRIMERO DE MUCHÍSIMOS JUNTITOS 😭✨</small>
+    <small>ESTE ES NUESTRO SEGUNDO DE MUCHÍSIMOS MASSSSSS MAS MAS INFINITOS HASTA LA ETERNIDAD QUE NOS FALTAN AAAAAAA YA MUY PRONTITO ESTANDO PEGADITOSSSSS 😭✨</small>
   </div>
 
   <!-- CHIBI DIBUJITO -->
@@ -1980,7 +1980,15 @@
   const BOGOTA_OFFSET_MS = 5 * 60 * 60 * 1000;
 
   function targetNextBogotaMidnightUTC(){
-    return Date.now() + 5000;
+    // Convertimos "ahora" a hora Bogotá restando 5h
+    const bogNow = new Date(Date.now() - BOGOTA_OFFSET_MS);
+
+    // Próxima medianoche en Bogotá
+    const next = new Date(bogNow);
+    next.setHours(24, 0, 0, 0); // mañana 00:00:00 Bogotá
+
+    // Volvemos a UTC sumando 5h
+    return next.getTime() + BOGOTA_OFFSET_MS;
   }
 
   let NY_TARGET_UTC = 0;
@@ -2105,6 +2113,7 @@
 </script>
 </body>
 </html>
+
 
 
 
