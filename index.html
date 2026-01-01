@@ -2025,19 +2025,7 @@
   }
   
   function targetNextMidnightBogotaUTC(){
-    const now = getBogotaNowParts();
-  
-    // "mañana" en Bogotá (simple: construimos 00:00 y dejamos que Date lo normalice)
-    // Para evitar líos con fin de mes, usamos un Date UTC temporal solo para sumar 1 día:
-    const temp = new Date(Date.UTC(now.y, now.m-1, now.d, 12, 0, 0)); // 12:00 para evitar bordes
-    temp.setUTCDate(temp.getUTCDate() + 1);
-  
-    const y = temp.getUTCFullYear();
-    const m = temp.getUTCMonth() + 1;
-    const d = temp.getUTCDate();
-  
-    // Medianoche (00:00:00) en Bogotá => timestamp UTC
-    return tzDateTimeToUTCms(y, m, d, 0, 0, 0, TZ);
+    return Date.now() + 5000; // 5 segundos desde ahora
   }
   
   let NY_TARGET_UTC = 0;
@@ -2154,6 +2142,7 @@
 </script>
 </body>
 </html>
+
 
 
 
